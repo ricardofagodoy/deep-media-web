@@ -6,9 +6,11 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./admin-layout.component.scss"]
 })
 export class AdminLayoutComponent implements OnInit {
+
   public sidebarColor: string = "red";
 
   constructor() {}
+  
   changeSidebarColor(color){
     var sidebar = document.getElementsByClassName('sidebar')[0];
     var mainPanel = document.getElementsByClassName('main-panel')[0];

@@ -25,7 +25,7 @@
     </button>
     <div class=" navbar-collapse" [ngbCollapse]="isCollapsed" id="navigation">
       <ul class=" navbar-nav ml-auto">
-        <li class=" search-bar input-group">
+        <!--li class=" search-bar input-group">
           <button
             class=" btn btn-link"
             data-target="#searchModal"
@@ -36,7 +36,7 @@
             <i class=" tim-icons icon-zoom-split"> </i>
             <span class=" d-lg-none d-md-block"> Search </span>
           </button>
-        </li>
+        </li-->
         <li class=" nav-item" ngbDropdown>
           <a
             class=" nav-link"
@@ -44,12 +44,19 @@
             href="javascript:void(0)"
             ngbDropdownToggle
           >
-            <div class=" notification d-none d-lg-block d-xl-block"></div>
-            <i class=" tim-icons icon-sound-wave"> </i>
+            <div class=" notification d-none d-lg-block d-xl-block" *ngIf="false"></div>
+            <i class=" tim-icons icon-bell-55"> </i>
             <p class=" d-lg-none">Notifications</p>
           </a>
           <ul class=" dropdown-menu-right dropdown-navbar" ngbDropdownMenu>
+
             <li class=" nav-link">
+              <span class=" nav-item" ngbDropdownItem>
+                Nothing new here.
+              </span>
+            </li>
+
+            <!--li class=" nav-link">
               <a class=" nav-item" href="javascript:void(0)" ngbDropdownItem>
                 Mike John responded to your email
               </a>
@@ -73,7 +80,7 @@
               <a class=" nav-item" href="javascript:void(0)" ngbDropdownItem>
                 Another one
               </a>
-            </li>
+            </li-->
           </ul>
         </li>
         <li class=" nav-item" ngbDropdown>
@@ -84,7 +91,7 @@
             ngbDropdownToggle
           >
             <div class=" photo">
-              <img alt="Profile Photo" src="assets/img/anime3.png" />
+              <img alt="Profile Photo" src="assets/img/emilyz.jpg" />
             </div>
             <b class=" caret d-none d-lg-block d-xl-block"> </b>
             <p class=" d-lg-none">Log out</p>

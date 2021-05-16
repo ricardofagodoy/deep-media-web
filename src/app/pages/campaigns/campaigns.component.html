@@ -1,0 +1,128 @@
+<div class=" content">
+  <div class=" row">
+    <div class=" col-md-5">
+      <div class=" card">
+        <div class=" card-header">
+          <h2 class=" card-title">Campaign</h2>
+        </div>
+        <div class=" card-body">
+          <form>
+
+            <div class="row align-items-center text-center">
+              <div class=" col-md-5">
+                <div class=" form-group">
+                  <label> Campaign Name </label>
+                  <br />
+                  <div ngbDropdown class="d-inline-block dropdown">
+                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle
+                      dropdown</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button ngbDropdownItem>Action - 1</button>
+                      <button ngbDropdownItem>Another Action</button>
+                      <button ngbDropdownItem>Something else is here</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class=" col-md-7">
+                Optimization strategy
+                <div style="color: green">CPA</div>
+              </div>
+            </div>
+
+            <div class=" row align-items-center text-center">
+              <div class=" col-md-5">
+                <div class=" form-group">
+                  <label> AdCost Target </label>
+                  <input class=" form-control" placeholder="Ex. 0.095 for 9.5%" type="number" step="0.1" />
+                </div>
+              </div>
+
+              <div class=" col-md-7">
+                Any explanation about this field you're about to fill
+              </div>
+            </div>
+
+            <div class=" row align-items-center text-center">
+              <div class=" col-md-5">
+                <div class=" form-group">
+                  <label> AdCost Margin </label>
+                  <input class=" form-control is-invalid" placeholder="Ex. 0.05 for 5%" type="number" step="0.1" />
+                </div>
+              </div>
+
+              <div class=" col-md-7">
+                Any explanation about this field you're about to fill
+              </div>
+            </div>
+
+            <div class="row align-items-center text-center">
+              <div class=" col-md-5">
+                <div class=" form-group">
+                  <label> Hours between optimizations </label>
+                  <input class=" form-control is-valid" placeholder="Minimum of 1 hour" type="number" step=1 />
+                </div>
+              </div>
+
+              <div class=" col-md-7">
+                Any explanation about this field you're about to fill
+              </div>
+            </div>
+
+          </form>
+        </div>
+        <div class=" card-footer">
+          <button class=" btn btn-fill btn-info" type="submit">Edit</button>
+          <button class=" btn btn-fill btn-info" type="submit">Save</button>
+          <button class=" btn btn-fill btn-danger" type="submit">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class=" col-md-7">
+      <div class="card">
+        <div class=" card-header">
+          <h2 class=" card-title">Optimizations</h2>
+        </div>
+        <div class=" card-body">
+
+          <div class="optimization-status">
+            <div>Optimizations are <span style="color: green">ON</span></div>
+            <div>Next execution is scheduled to <span style="color: green">16/05/2021 18:30</span></div>
+            <button class=" btn btn-fill btn-info" type="submit">Turn on</button>
+            <button class=" btn btn-fill btn-danger" type="submit">Turn off</button>
+          </div>
+
+          <hr/>
+
+          <h4 class=" card-title">Latest Executions</h4>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="text-center">Date</th>
+                <th class="text-center">Campaign</th>
+                <th class="text-center">Target</th>
+                <th class="text-center">Margin</th>
+                <th class="text-center">Optimize</th>
+                <th class="text-center">Before</th>
+                <th class="text-center">After</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center">16/05/2021</td>
+                <td class="text-center">Your Campaign Name</td>
+                <td class="text-center">9.5%</td>
+                <td class="text-center">0.5%</td>
+                <td class="text-center">CPA</td>
+                <td class="text-center">R$ 12,50</td>
+                <td class="text-center">R$ 14,00</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>

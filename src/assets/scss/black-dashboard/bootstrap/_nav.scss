@@ -33,7 +33,8 @@
   border-bottom: $nav-tabs-border-width solid $nav-tabs-border-color;
 
   .nav-item {
-    margin-bottom: -$nav-tabs-border-width;
+    margin: auto 0;
+    //margin-bottom: -$nav-tabs-border-width;
   }
 
   .nav-link {
