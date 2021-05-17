@@ -1,15 +1,16 @@
 <div class=" content">
   <div class=" row">
-    <div class=" col-md-5">
+    <div class=" col-md-8">
       <div class=" card">
         <div class=" card-header">
+          <h5 class=" card-category">Settings</h5>
           <h2 class=" card-title">Campaign</h2>
         </div>
         <div class=" card-body">
           <form>
 
             <div class="row align-items-center text-center">
-              <div class=" col-md-5">
+              <div class=" col-md-12">
                 <div class=" form-group">
                   <label> Campaign Name </label>
                   <br />
@@ -24,10 +25,18 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div class=" row align-items-center text-center">
+              <div class=" col-md-5">
+                <div class=" form-group">
+                  <label> Optimization Strategy </label>
+                  <input class=" form-control" type="text" value="CPA" disabled="" />
+                </div>
+              </div>
 
               <div class=" col-md-7">
-                Optimization strategy
-                <div style="color: green">CPA</div>
+                Any explanation about this field you're about to fill
               </div>
             </div>
 
@@ -72,7 +81,7 @@
 
           </form>
         </div>
-        <div class=" card-footer">
+        <div class="card-footer">
           <button class=" btn btn-fill btn-info" type="submit">Edit</button>
           <button class=" btn btn-fill btn-info" type="submit">Save</button>
           <button class=" btn btn-fill btn-danger" type="submit">Cancel</button>
@@ -80,48 +89,27 @@
       </div>
     </div>
 
-    <div class=" col-md-7">
+    <div class="col-md-4">
       <div class="card">
         <div class=" card-header">
-          <h2 class=" card-title">Optimizations</h2>
+          <h5 class=" card-category">Status</h5>
+          <h2 class=" card-title">Optimize</h2>
         </div>
-        <div class=" card-body">
+
+        <div class=" card-body text-center">
 
           <div class="optimization-status">
             <div>Optimizations are <span style="color: green">ON</span></div>
-            <div>Next execution is scheduled to <span style="color: green">16/05/2021 18:30</span></div>
+            <br/>
+            <div>Next execution is scheduled to</div>
+            <div style="color: green">16/05/2021 18:30</div>
+          </div>
+
+          <div class="card-footer">
             <button class=" btn btn-fill btn-info" type="submit">Turn on</button>
             <button class=" btn btn-fill btn-danger" type="submit">Turn off</button>
           </div>
 
-          <hr/>
-
-          <h4 class=" card-title">Latest Executions</h4>
-
-          <table class="table">
-            <thead>
-              <tr>
-                <th class="text-center">Date</th>
-                <th class="text-center">Campaign</th>
-                <th class="text-center">Target</th>
-                <th class="text-center">Margin</th>
-                <th class="text-center">Optimize</th>
-                <th class="text-center">Before</th>
-                <th class="text-center">After</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="text-center">16/05/2021</td>
-                <td class="text-center">Your Campaign Name</td>
-                <td class="text-center">9.5%</td>
-                <td class="text-center">0.5%</td>
-                <td class="text-center">CPA</td>
-                <td class="text-center">R$ 12,50</td>
-                <td class="text-center">R$ 14,00</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>

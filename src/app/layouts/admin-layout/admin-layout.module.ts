@@ -13,6 +13,7 @@ import { UserComponent } from "../../pages/user/user.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { GoogleAdsConfigurationComponent } from 'src/app/pages/configuration/google_ads/google_ads.configuration.component';
 import { GoogleAnalyticsConfigurationComponent } from 'src/app/pages/configuration/google_analytics/google_analytics.configuration.component';
+import { HistoryComponent } from 'src/app/pages/history/history.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { GoogleAnalyticsConfigurationComponent } from 'src/app/pages/configurati
     DashboardComponent,
     UserComponent,
     CampaignsComponent,
+    HistoryComponent,
     ConfigurationComponent, GoogleAdsConfigurationComponent, GoogleAnalyticsConfigurationComponent
   ]
 })
