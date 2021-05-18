@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "black-dashboard-angular": {
+    "deep-media-web": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -33,7 +33,7 @@
               "src/assets/scss/black-dashboard.scss",
               "src/assets/css/nucleo-icons.css"
             ],
-            "scripts": [],
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -46,7 +46,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -65,18 +64,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "black-dashboard-angular:build"
+            "browserTarget": "deep-media-web:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "black-dashboard-angular:build:production"
+              "browserTarget": "deep-media-web:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "black-dashboard-angular:build"
+            "browserTarget": "deep-media-web:build"
           }
         },
         "test": {
@@ -110,7 +109,7 @@
         }
       }
     },
-    "black-dashboard-angular-e2e": {
+    "deep-media-web-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "prefix": "",
@@ -119,11 +118,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "black-dashboard-angular:serve"
+            "devServerTarget": "deep-media-web:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "black-dashboard-angular:serve:production"
+              "devServerTarget": "deep-media-web:serve:production"
             }
           }
         },
@@ -139,7 +138,7 @@
       }
     }
   },
-  "defaultProject": "black-dashboard-angular",
+  "defaultProject": "deep-media-web",
   "cli": {
     "analytics": false
   }
