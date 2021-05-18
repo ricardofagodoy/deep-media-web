@@ -1,5 +1,5 @@
 #!/bin/bash
 
-ng build --prod
+ng build --configuration production
 gcloud app deploy -q
 rm -rf dist
