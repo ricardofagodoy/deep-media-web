@@ -7,13 +7,12 @@ import { FormsModule } from "@angular/forms";
 import { AdminLayoutRoutes } from "./admin-layout.routing";
 import { DashboardComponent } from "../../pages/dashboard/dashboard.component";
 import { CampaignsComponent } from "../../pages/campaigns/campaigns.component";
-import { ConfigurationComponent } from "../../pages/configuration/configuration.component";
 import { UserComponent } from "../../pages/user/user.component";
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { GoogleAdsConfigurationComponent } from 'src/app/pages/configuration/google_ads/google_ads.configuration.component';
-import { GoogleAnalyticsConfigurationComponent } from 'src/app/pages/configuration/google_analytics/google_analytics.configuration.component';
 import { HistoryComponent } from 'src/app/pages/history/history.component';
+import { ConnectorComponent } from 'src/app/pages/connectors/connector.component';
+import { GoogleConnectorComponent } from 'src/app/pages/connectors/google/google.connector.component';
 
 @NgModule({
   imports: [
@@ -21,14 +20,14 @@ import { HistoryComponent } from 'src/app/pages/history/history.component';
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
     HttpClientModule,
-    NgbModule,
+    NgbModule
   ],
   declarations: [
     DashboardComponent,
     UserComponent,
     CampaignsComponent,
     HistoryComponent,
-    ConfigurationComponent, GoogleAdsConfigurationComponent, GoogleAnalyticsConfigurationComponent
+    ConnectorComponent, GoogleConnectorComponent
   ]
 })
 export class AdminLayoutModule {}

@@ -90,8 +90,8 @@
             href="javascript:void(0)"
             ngbDropdownToggle
           >
-            <div class=" photo">
-              <img alt="Profile Photo" src="assets/img/emilyz.jpg" />
+            <div class=" photo" *ngIf="auth.user | async as user">
+              <img alt="Profile Photo" [src]="user.photoURL" />
             </div>
             <b class=" caret d-none d-lg-block d-xl-block"> </b>
             <p class=" d-lg-none">Log out</p>
@@ -104,7 +104,7 @@
             </li>
             <li class=" dropdown-divider"></li>
             <li class=" nav-link">
-              <a class=" nav-item" href="javascript:void(0)" ngbDropdownItem>
+              <a class=" nav-item" href="javascript:void(0)" (click)="logout()" ngbDropdownItem>
                 Log out
               </a>
             </li>

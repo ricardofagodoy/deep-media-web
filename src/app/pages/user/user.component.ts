@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { ToastrService } from 'ngx-toastr';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
   selector: "app-user",
@@ -7,7 +8,9 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class UserComponent implements OnInit {
   
-  constructor(private toastr: ToastrService) {}
+  constructor(
+    private toastr: ToastrService, 
+    public auth: AngularFireAuth) {}
 
   ngOnInit() {}
 

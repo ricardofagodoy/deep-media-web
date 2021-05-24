@@ -1,6 +1,6 @@
 
 <div class=" content">
-  <div class=" row">
+  <div *ngIf="auth.user | async as user" class=" row">
     <div class=" col-md-8">
       <div class=" card">
         <div class=" card-header">
@@ -15,7 +15,7 @@
                   <label for="exampleInputEmail1"> Email address </label>
                   <input
                     class=" form-control"
-                    placeholder="janedoe@email.com"
+                    placeholder="{{user.email}}"
                     disabled=""
                     type="email"
                   />
@@ -28,10 +28,9 @@
                   <label> First Name </label>
                   <input
                     class=" form-control"
-                    placeholder="Company"
+                    placeholder="{{user.displayName.split(' ')[0]}}"
                     type="text"
                     disabled=""
-                    value="Jane"
                   />
                 </div>
               </div>
@@ -40,10 +39,9 @@
                   <label> Last Name </label>
                   <input
                     class=" form-control"
-                    placeholder="Last Name"
+                    placeholder="{{user.displayName.split(' ')[1]}}"
                     type="text"
                     disabled=""
-                    value="Doe"
                   />
                 </div>
               </div>
@@ -51,7 +49,7 @@
           </form>
         </div>
         <div class=" card-footer">
-          <button class=" btn btn-fill btn-danger" (click)="save()">Save</button>
+          <!--button class=" btn btn-fill btn-danger" (click)="save()">Save</button-->
         </div>
       </div>
     </div>
@@ -65,15 +63,15 @@
             <div class=" block block-three"></div>
             <div class=" block block-four"></div>
             <a href="javascript:void(0)">
-              <img alt="..." class=" avatar" src="assets/img/emilyz.jpg" />
+              <img alt="..." class=" avatar" [src]="user.photoURL" />
 
-              <h5 class=" title">Jane Doe</h5>
+              <h5 class=" title">{{user.displayName}}</h5>
             </a>
             <p class=" description">Free plan user</p>
           </div>
         </div>
         <div class=" card-footer button-container">
-          <button class=" btn btn-fill btn-danger" type="submit">Delete account</button>
+          <button class=" btn btn-fill btn-danger" disabled="" type="submit">Delete account</button>
         </div>
       </div>
     </div>

@@ -1,8 +1,18 @@
-.optimization-status {
-    font-size: 1.1em;
-    margin-bottom: 2%;
+.status-label {
+    font-size: 2em;
+    margin-bottom: 3% 0;
+}
 
-    button {
-        margin: 2% 2% 0 0;
+.form-group {
+    select {
+        width: 250px;
+        height: 50px;
+        font-size: 1.2em;
+        font-weight: 600;
+        background-image: linear-gradient(to bottom left, #344675, #263148, #344675);
+        color: #fff;
+        border: 0;
+        border-radius: 5%;
+        padding: 8px 16px;
     }
 }

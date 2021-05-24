@@ -1,95 +1,185 @@
 <div class=" content">
   <div class=" row">
-    <div class=" col-md-8">
+    <div class=" col-md-12">
       <div class=" card">
         <div class=" card-header">
           <h5 class=" card-category">Settings</h5>
           <h2 class=" card-title">Campaign</h2>
         </div>
-        <div class=" card-body">
-          <form>
 
-            <div class="row align-items-center text-center">
-              <div class=" col-md-12">
-                <div class=" form-group">
-                  <label> Campaign Name </label>
-                  <br />
-                  <div ngbDropdown class="d-inline-block dropdown">
-                    <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle
-                      dropdown</button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                      <button ngbDropdownItem>Action - 1</button>
-                      <button ngbDropdownItem>Another Action</button>
-                      <button ngbDropdownItem>Something else is here</button>
+        <!-- Configuration -->
+        <div *ngIf="configuration; else new_config">
+
+          <div class=" card-body" *ngIf="connectorOptions | async as options">
+            
+            <form>
+              <div class="row align-items-center text-center">
+                <div class=" col-md-6">
+                  <div class=" form-group">
+                    <label> Ads Account </label>
+                    <br />
+                    <!--div ngbDropdown class="d-inline-block dropdown">
+                      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle
+                        dropdown</button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngFor="let acc of options.ads_accounts | keyvalue">
+                        <button ngbDropdownItem>{{acc.key}}</button>
+                      </div>
+                    </div-->
+                    <select name="ads_account" [(ngModel)]="configuration.ads_account">
+                      <option *ngFor="let account of options.ads_accounts | keyvalue" [value]="account.key">
+                        {{account.key}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class=" col-md-6">
+                  <div class=" form-group">
+                    <label> Ads Campaign </label>
+                    <br />
+                    <select name="ads_campaign" [(ngModel)]="configuration.ads_campaign">
+                      <option *ngFor="let campaign of options.ads_accounts[configuration.ads_account]" [value]="campaign">
+                        {{campaign}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row align-items-center text-center">
+                <div class=" col-md-4">
+                  <div class=" form-group">
+                    <label> Analytics Account </label>
+                    <br />
+                    <div ngbDropdown class="d-inline-block dropdown">
+                      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle
+                        dropdown</button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngFor="let acc of options.ads_accounts | keyvalue">
+                        <button ngbDropdownItem>{{acc.key}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class=" col-md-4">
+                  <div class=" form-group">
+                    <label> Analytics Property </label>
+                    <br />
+                    <div ngbDropdown class="d-inline-block dropdown">
+                      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle
+                        dropdown</button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngFor="let acc of options.ads_accounts | keyvalue">
+                        <button ngbDropdownItem>{{acc.key}}</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class=" col-md-4">
+                  <div class=" form-group">
+                    <label> Analytics Metric </label>
+                    <br />
+                    <div ngbDropdown class="d-inline-block dropdown">
+                      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Toggle
+                        dropdown</button>
+                      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" *ngFor="let acc of options.ads_accounts | keyvalue">
+                        <button ngbDropdownItem>{{acc.key}}</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class=" row align-items-center text-center">
-              <div class=" col-md-5">
-                <div class=" form-group">
-                  <label> Optimization Strategy </label>
-                  <input class=" form-control" type="text" value="CPA" disabled="" />
+              <!--div class=" row align-items-center text-center">
+                <div class=" col-md-5">
+                  <div class=" form-group">
+                    <label> Optimization Strategy </label>
+                    <input class=" form-control" type="text" value="CPA" disabled="" />
+                  </div>
+                </div>
+
+                <div class=" col-md-7">
+                  Any explanation about this field you're about to fill
+                </div>
+              </div-->
+
+              <div class=" row align-items-center text-center">
+                <div class=" col-md-5">
+                  <div class=" form-group">
+                    <label> AdCost Target </label>
+                    <input class=" form-control" placeholder="Ex. 0.095 for 9.5%" type="number" step="0.1" />
+                  </div>
+                </div>
+
+                <div class=" col-md-7">
+                  Any explanation about this field you're about to fill
                 </div>
               </div>
 
-              <div class=" col-md-7">
-                Any explanation about this field you're about to fill
-              </div>
-            </div>
+              <div class=" row align-items-center text-center">
+                <div class=" col-md-5">
+                  <div class=" form-group">
+                    <label> Optimizations Status </label>
+                    <div [ngStyle]="{'color': configuration.active ? 'green' : 'red'}" class="status-label">{{configuration.active ? 'ON' : 'OFF'}}</div>
+                    
+                    <button class=" btn btn-fill btn-danger" *ngIf="configuration.active" (click)="toggle_active()">Disable</button>
+                    <button class=" btn btn-fill btn-info" *ngIf="!configuration.active" (click)="toggle_active()">Enable</button>
+                  </div>
+                </div>
 
-            <div class=" row align-items-center text-center">
-              <div class=" col-md-5">
-                <div class=" form-group">
-                  <label> AdCost Target </label>
-                  <input class=" form-control" placeholder="Ex. 0.095 for 9.5%" type="number" step="0.1" />
+                <div class=" col-md-7">
+                  Any explanation about this field you're about to fill
                 </div>
               </div>
 
-              <div class=" col-md-7">
-                Any explanation about this field you're about to fill
-              </div>
-            </div>
-
-            <div class=" row align-items-center text-center">
-              <div class=" col-md-5">
-                <div class=" form-group">
-                  <label> AdCost Margin </label>
-                  <input class=" form-control is-invalid" placeholder="Ex. 0.05 for 5%" type="number" step="0.1" />
+              <!--div class=" row align-items-center text-center">
+                <div class=" col-md-5">
+                  <div class=" form-group">
+                    <label> AdCost Margin </label>
+                    <input class=" form-control is-invalid" placeholder="Ex. 0.05 for 5%" type="number" step="0.1" />
+                  </div>
                 </div>
-              </div>
 
-              <div class=" col-md-7">
-                Any explanation about this field you're about to fill
-              </div>
-            </div>
-
-            <div class="row align-items-center text-center">
-              <div class=" col-md-5">
-                <div class=" form-group">
-                  <label> Hours between optimizations </label>
-                  <input class=" form-control is-valid" placeholder="Minimum of 1 hour" type="number" step=1 />
+                <div class=" col-md-7">
+                  Any explanation about this field you're about to fill
                 </div>
-              </div>
+              </div-->
 
-              <div class=" col-md-7">
-                Any explanation about this field you're about to fill
-              </div>
-            </div>
+              <!--div class="row align-items-center text-center">
+                <div class=" col-md-5">
+                  <div class=" form-group">
+                    <label> Hours between optimizations </label>
+                    <input class=" form-control is-valid" placeholder="Minimum of 1 hour" type="number" step=1 />
+                  </div>
+                </div>
 
-          </form>
+                <div class=" col-md-7">
+                  Any explanation about this field you're about to fill
+                </div>
+              </div-->
+            </form>
+          </div>
+
+          <div class="card-footer">
+            <button class=" btn btn-fill btn-info" (click)="save()">Save</button>
+          </div>
         </div>
-        <div class="card-footer">
-          <button class=" btn btn-fill btn-info" type="submit">Edit</button>
-          <button class=" btn btn-fill btn-info" type="submit">Save</button>
-          <button class=" btn btn-fill btn-danger" type="submit">Cancel</button>
-        </div>
+
+        <!-- New configuration -->
+        <ng-template #new_config>
+          <div class="card-body">
+            You don't have any configuration yet.
+          </div>
+
+          <div class="card-footer">
+            <button class=" btn btn-fill btn-info" (click)="create_new()">New</button>
+          </div>
+        </ng-template>
+
       </div>
     </div>
 
-    <div class="col-md-4">
+    <!--div class="col-md-4">
       <div class="card">
         <div class=" card-header">
           <h5 class=" card-category">Status</h5>
@@ -112,5 +202,5 @@
 
         </div>
       </div>
-    </div>
+    </div-->
   </div>

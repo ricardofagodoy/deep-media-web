@@ -11,24 +11,24 @@
           <table class="table">
             <thead>
               <tr>
-                <th class="text-center">Date</th>
+                <th class="text-center">Date/Hour</th>
                 <th class="text-center">Campaign</th>
-                <th class="text-center">Target</th>
+                <th class="text-center">Target AdCost</th>
                 <th class="text-center">Margin</th>
-                <th class="text-center">Optimize</th>
+                <th class="text-center">Optimization Metric</th>
                 <th class="text-center">Before</th>
                 <th class="text-center">After</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="text-center">16/05/2021</td>
-                <td class="text-center">Your Campaign Name</td>
-                <td class="text-center">9.5%</td>
-                <td class="text-center">0.5%</td>
-                <td class="text-center">CPA</td>
-                <td class="text-center">R$ 12,50</td>
-                <td class="text-center">R$ 14,00</td>
+              <tr *ngFor="let row of history | async">
+                <td class="text-center">{{row.date}}</td>
+                <td class="text-center">{{row.campaign}}</td>
+                <td class="text-center">{{row.target}}</td>
+                <td class="text-center">{{row.margin}}</td>
+                <td class="text-center">{{row.optimize}}</td>
+                <td class="text-center">{{row.before}}</td>
+                <td class="text-center">{{row.after}}</td>
               </tr>
             </tbody>
           </table>

@@ -1,0 +1,10 @@
+
+<div class=" content">
+  <div class=" row" *ngIf="connectors | async as c">
+
+    <!-- Google Ads connection -->
+    <div class=" col-md-4">
+      <app-google-connector type="google" [active]="c.includes('google')"></app-google-connector>
+    </div>
+  </div>
+</div>
