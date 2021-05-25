@@ -22,6 +22,10 @@ export class CampaignsFacade {
         return this.repository.getConnectorOptions(type)
     }
 
+    public loadConnectors() {
+        return this.repository.getConnectors()
+    }
+
     private loadConfiguration() {
         return this.repository.getConfigurations()
     }

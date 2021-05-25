@@ -7,77 +7,89 @@
           <h2 class=" card-title">Campaign</h2>
         </div>
 
-        <!-- Configuration -->
-        <div *ngIf="configuration; else new_config">
+        <!-- Message when not connected-->
+        <div *ngIf="(connectors | async)?.length == 0; else connected">
+          <div class="card-body">
+            You don't have any <a href="#/connectors">connectors</a> yet.
+          </div>
+        </div>
 
-          <div class=" card-body" *ngIf="connectorOptions | async as options">
-            
-            <h4>Configure your Google optimization</h4>
+        <!-- Configuration when connected -->
+        <ng-template #connected>
 
-            <form>
-              <div class="row align-items-center text-center">
-                <div class=" col-md-5">
-                  <div class=" form-group">
-                    <label> Ads Account </label>
-                    <br />
-                    <select name="ads_account" [(ngModel)]="configuration.ads_account" class="is-valid">
-                      <option *ngFor="let account of options.ads_accounts | keyvalue" [value]="account.key">
-                        {{account.key}}
-                      </option>
-                    </select>
+          <div *ngIf="configuration; else new_config">
+            <div class=" card-body" *ngIf="connectorOptions | async as options">
+
+              <h4>Configure your Google optimization</h4>
+
+              <form>
+                <div class="row align-items-center text-center">
+                  <div class=" col-md-5">
+                    <div class=" form-group">
+                      <label> Ads Account </label>
+                      <br />
+                      <select name="ads_account" [(ngModel)]="configuration.ads_account" class="is-valid">
+                        <option *ngFor="let account of options.ads_accounts | keyvalue" [value]="account.key">
+                          {{account.key}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class=" col-md-7">
+                    Google Ads account your campaing lives in
                   </div>
                 </div>
 
-                <div class=" col-md-7">
-                  Google Ads account your campaing lives in
-                </div>
-              </div>
+                <div class=" row align-items-center text-center">
+                  <div class=" col-md-5">
+                    <div class=" form-group">
+                      <label> Ads Campaign </label>
+                      <br />
+                      <select name="ads_campaign" [(ngModel)]="configuration.ads_campaign"
+                        *ngIf="configuration.ads_account; else placeholder">
+                        <option *ngFor="let campaign of options.ads_accounts[configuration.ads_account]"
+                          [value]="campaign">
+                          {{campaign}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
 
-              <div class=" row align-items-center text-center">
-                <div class=" col-md-5">
-                  <div class=" form-group">
-                    <label> Ads Campaign </label>
-                    <br />
-                    <select name="ads_campaign" [(ngModel)]="configuration.ads_campaign" *ngIf="configuration.ads_account; else placeholder">
-                      <option *ngFor="let campaign of options.ads_accounts[configuration.ads_account]" [value]="campaign">
-                        {{campaign}}
-                      </option>
-                    </select>
+                  <div class=" col-md-7">
+                    Google Ads campaign to be optimized
                   </div>
                 </div>
 
-                <div class=" col-md-7">
-                  Google Ads campaign to be optimized
-                </div>
-              </div>
+                <hr />
 
-              <hr />
-              
-              <div class=" row align-items-center text-center">
-                <div class=" col-md-5">
-                  <div class=" form-group">
-                    <label> Analytics Account </label>
-                    <br />
-                    <select name="ga_account" [(ngModel)]="configuration.ga_account">
-                      <option *ngFor="let account of options.ga_accounts | keyvalue" [value]="account.key">
-                        {{account.key}}
-                      </option>
-                    </select>
+                <div class=" row align-items-center text-center">
+                  <div class=" col-md-5">
+                    <div class=" form-group">
+                      <label> Analytics Account </label>
+                      <br />
+                      <select name="ga_account" [(ngModel)]="configuration.ga_account">
+                        <option *ngFor="let account of options.ga_accounts | keyvalue" [value]="account.key">
+                          {{account.key}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class=" col-md-7">
+                    Google Analytics account to pull sales metrics
                   </div>
                 </div>
-
-                <div class=" col-md-7">
-                  Google Analytics account to pull sales metrics
-                </div>
-              </div>
 
                 <div class=" row align-items-center text-center">
                   <div class=" col-md-5">
                     <div class=" form-group">
                       <label> Analytics Property </label>
                       <br />
-                      <select name="ga_property" [(ngModel)]="configuration.ga_property" *ngIf="configuration.ga_account; else placeholder">
-                        <option *ngFor="let property of options.ga_accounts[configuration.ga_account] | keyvalue" [value]="property.key">
+                      <select name="ga_property" [(ngModel)]="configuration.ga_property"
+                        *ngIf="configuration.ga_account; else placeholder">
+                        <option *ngFor="let property of options.ga_accounts[configuration.ga_account] | keyvalue"
+                          [value]="property.key">
                           {{property.key}}
                         </option>
                       </select>
@@ -89,79 +101,87 @@
                   </div>
                 </div>
 
-              <div class=" row align-items-center text-center">
-                <div class=" col-md-5">
-                  <div class=" form-group">
-                    <label> Analytics Metric </label>
-                    <br />
-                    <select name="ga_metric" [(ngModel)]="configuration.ga_metric" *ngIf="configuration.ga_property; else placeholder">
-                      <option *ngFor="let metric of options.ga_accounts[configuration.ga_account][configuration.ga_property]" [value]="metric">
-                        {{metric}}
-                      </option>
-                    </select>
+                <div class=" row align-items-center text-center">
+                  <div class=" col-md-5">
+                    <div class=" form-group">
+                      <label> Analytics Metric </label>
+                      <br />
+                      <select name="ga_metric" [(ngModel)]="configuration.ga_metric"
+                        *ngIf="configuration.ga_property; else placeholder">
+                        <option
+                          *ngFor="let metric of options.ga_accounts[configuration.ga_account][configuration.ga_property]"
+                          [value]="metric">
+                          {{metric}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class=" col-md-7">
+                    Custom Metric for your sales value amount
                   </div>
                 </div>
-
-                <div class=" col-md-7">
-                  Custom Metric for your sales value amount
-                </div>
-              </div>
 
                 <ng-template #placeholder>
                   <select disabled></select>
                 </ng-template>
 
 
-              <hr/>
+                <hr />
 
-              <div class=" row align-items-center text-center">
-                <div class=" col-md-5">
-                  <div class=" form-group">
-                    <label> AdCost Target (%) </label>
-                    <input name="adcost_target" class=" form-control" [(ngModel)]="configuration.adcost_target" type="number" min="0.1" max="500" step="0.1" />
+                <div class=" row align-items-center text-center">
+                  <div class=" col-md-5">
+                    <div class=" form-group">
+                      <label> AdCost Target (%) </label>
+                      <input name="adcost_target" class=" form-control" [(ngModel)]="configuration.adcost_target"
+                        type="number" min="0.1" max="500" step="0.1" />
+                    </div>
+                  </div>
+
+                  <div class=" col-md-7">
+                    Derired AdCost (investment divided by sales)
                   </div>
                 </div>
 
-                <div class=" col-md-7">
-                  Derired AdCost (investment divided by sales)
-                </div>
-              </div>
+                <hr />
 
-              <hr/>
+                <div class=" row align-items-center text-center">
+                  <div class=" col-md-5">
+                    <div class=" form-group">
+                      <label> Optimizations Status </label>
+                      <div [ngStyle]="{'color': configuration.active ? 'green' : 'red'}" class="status-label">
+                        {{configuration.active ? 'ON' : 'OFF'}}</div>
 
-              <div class=" row align-items-center text-center">
-                <div class=" col-md-5">
-                  <div class=" form-group">
-                    <label> Optimizations Status </label>
-                    <div [ngStyle]="{'color': configuration.active ? 'green' : 'red'}" class="status-label">{{configuration.active ? 'ON' : 'OFF'}}</div>
-                    
-                    <button class=" btn btn-fill btn-danger" *ngIf="configuration.active" (click)="toggle_active()">Disable</button>
-                    <button class=" btn btn-fill btn-info" *ngIf="!configuration.active" (click)="toggle_active()">Enable</button>
+                      <button class=" btn btn-fill btn-danger" *ngIf="configuration.active"
+                        (click)="toggle_active()">Disable</button>
+                      <button class=" btn btn-fill btn-info" *ngIf="!configuration.active"
+                        (click)="toggle_active()">Enable</button>
+                    </div>
+                  </div>
+
+                  <div class=" col-md-7">
+                    If you want us to optimize this campaign
                   </div>
                 </div>
+              </form>
+            </div>
 
-                <div class=" col-md-7">
-                  If you want us to optimize this campaign
-                </div>
-              </div>
-            </form>
+            <div class="card-footer">
+              <button class=" btn btn-fill btn-info" [disabled]="!is_all_valid()" (click)="save()">Save</button>
+              <button class=" btn btn-fill btn-danger" (click)="cancel()">Cancel</button>
+            </div>
           </div>
 
-          <div class="card-footer">
-            <button class=" btn btn-fill btn-info" [disabled]="!is_all_valid()" (click)="save()">Save</button>
-            <button class=" btn btn-fill btn-danger" (click)="cancel()">Cancel</button>
-          </div>
-        </div>
+          <!-- New configuration -->
+          <ng-template #new_config>
+            <div class="card-body">
+              You don't have any configuration yet.
+            </div>
 
-        <!-- New configuration -->
-        <ng-template #new_config>
-          <div class="card-body">
-            You don't have any configuration yet.
-          </div>
-
-          <div class="card-footer">
-            <button class=" btn btn-fill btn-info" (click)="create_new()">New</button>
-          </div>
+            <div class="card-footer">
+              <button class=" btn btn-fill btn-info" (click)="create_new()">New</button>
+            </div>
+          </ng-template>
         </ng-template>
 
       </div>

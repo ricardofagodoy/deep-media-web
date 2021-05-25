@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { CampaignsFacade } from './campaigns.facade';
 import { Configuration } from 'src/app/models/configuration';
 import { ToastrService } from 'ngx-toastr';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: "app-campaigns",
@@ -13,6 +14,7 @@ export class CampaignsComponent implements OnInit {
   private readonly TYPE = 'google'
 
   public configuration : Configuration
+  public connectors : Observable<string[]>
   public connectorOptions : any
 
   constructor(
@@ -23,6 +25,7 @@ export class CampaignsComponent implements OnInit {
       this.configuration = configuration[0]
     })
 
+    this.connectors = this.facade.loadConnectors()
     this.connectorOptions = this.facade.loadConnectorOptions(this.TYPE)
   }
 
