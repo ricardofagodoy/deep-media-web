@@ -11,11 +11,11 @@ import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.compon
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 import { AppRoutingModule } from "./app-routing.module";
-import { ComponentsModule } from "./components/components.module";
 import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { GuestLayoutComponent } from './layouts/guest-layout/guest-layout.component';
 import { AuthInterceptor } from './repository/ApiInterceptor';
+import { ComponentsModule } from './layouts/admin-layout/components/components.module';
 
 @NgModule({
   imports: [

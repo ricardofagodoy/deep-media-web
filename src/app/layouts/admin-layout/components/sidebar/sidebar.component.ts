@@ -20,14 +20,14 @@ export const ROUTES: RouteInfo[] = [
     class: ""
   },
   {
-    path: "/history",
-    title: "History",
+    path: "/optimizations",
+    title: "Optimizations",
     icon: "icon-paper",
     class: ""
   },
   {
-    path: "/configuration",
-    title: "Configuration",
+    path: "/connectors",
+    title: "Connectors",
     icon: "icon-settings",
     class: "" 
   }

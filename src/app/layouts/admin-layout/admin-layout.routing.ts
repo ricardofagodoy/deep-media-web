@@ -9,7 +9,7 @@ import { ConnectorComponent } from 'src/app/pages/connectors/connector.component
 export const AdminLayoutRoutes: Routes = [
   { path: "dashboard", component: DashboardComponent },
   { path: "campaign", component: CampaignsComponent },
-  { path: "history", component: HistoryComponent },
-  { path: "configuration", component: ConnectorComponent },
+  { path: "optimizations", component: HistoryComponent },
+  { path: "connectors", component: ConnectorComponent },
   { path: "profile", component: UserComponent }
 ];

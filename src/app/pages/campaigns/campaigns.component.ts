@@ -10,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class CampaignsComponent implements OnInit {
 
+  private readonly TYPE = 'google'
+
   public configuration : Configuration
   public connectorOptions : any
 
@@ -21,17 +23,26 @@ export class CampaignsComponent implements OnInit {
       this.configuration = configuration[0]
     })
 
-    this.connectorOptions = this.facade.loadConnectorOptions()
+    this.connectorOptions = this.facade.loadConnectorOptions(this.TYPE)
   }
 
   ngOnInit() {}
 
   create_new() {
-    this.configuration = {} as any
+    this.configuration = {
+      type: this.TYPE,
+      adcost_target: 10
+    } as any
   }
 
   toggle_active() {
     this.configuration.active = !this.configuration.active
+  }
+
+  is_all_valid() {
+    return this.configuration.adcost_target &&
+           this.configuration.ads_campaign &&
+           this.configuration.ga_metric
   }
 
   save() {
@@ -40,5 +51,9 @@ export class CampaignsComponent implements OnInit {
         positionClass: 'toast-bottom-center'
       })
     })
+  }
+
+  cancel() {
+    this.configuration = undefined
   }
 }

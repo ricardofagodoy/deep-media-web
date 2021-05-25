@@ -1,0 +1,13 @@
+.next-optimization {
+    width: 100%;
+    font-size: 1.3em;
+    color: #fff;
+    background-color: rgba($color: #00ff4c, $alpha: 0.5);
+    padding: 2%;
+    margin-bottom: 3%;
+    border-radius: 2px;
+}
+
+.disabled {
+    background-color: rgba($color: #f01111, $alpha: 0.5);
+}

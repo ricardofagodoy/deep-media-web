@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
 import { Performance } from '../models/Performance';
-import { History } from '../models/history';
 import { Connector } from '../models/connector';
 import { Configuration } from '../models/configuration';
+import { Optimization } from '../models/optimization';
 
 @Injectable({
     providedIn: 'root'
@@ -20,8 +20,8 @@ export class ApiRepository {
         )
     }
 
-    getHistory(): Observable<History[]> {
-        return this.http.get<History[]>(
+    getOptimizations(): Observable<Optimization> {
+        return this.http.get<Optimization>(
             `${environment.backend_host}/optimizations`
         )
     }

@@ -18,8 +18,8 @@ export class CampaignsFacade {
         return this.configuration
     }
 
-    public loadConnectorOptions() {
-        return this.repository.getConnectorOptions('google')
+    public loadConnectorOptions(type : string) {
+        return this.repository.getConnectorOptions(type)
     }
 
     private loadConfiguration() {

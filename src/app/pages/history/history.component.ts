@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HistoryFacade } from './history.facade';
 import { Observable } from 'rxjs';
-import { History } from 'src/app/models/history';
+import { Optimization } from 'src/app/models/optimization';
 
 @Component({
   selector: "app-history",
@@ -10,11 +10,11 @@ import { History } from 'src/app/models/history';
 })
 export class HistoryComponent implements OnInit {
 
-  history : Observable<History[]>
+  optimizations : Observable<Optimization>
 
   constructor(private facade : HistoryFacade) {}
 
   ngOnInit() {
-    this.history = this.facade.history$
+    this.optimizations = this.facade.optimizations$
   }
 }

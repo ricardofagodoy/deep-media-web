@@ -1,13 +1,19 @@
 <div class=" content">
-  <div class=" row">
+  <div class=" row" *ngIf="optimizations | async as opts">
     <div class=" col-md-12">
       <div class="card">
         <div class=" card-header">
           <h5 class=" card-category">Latest Executions</h5>
-          <h2 class=" card-title">History</h2>
+          <h2 class=" card-title">Optimizations</h2>
         </div>
         <div class=" card-body">
 
+          <div class="next-optimization" *ngIf="opts.future; else optimizationDisabled">Next Optimization scheduled to <b>{{opts.future}}</b></div>
+          
+          <ng-template #optimizationDisabled>
+            <div class="next-optimization disabled">Optimizations are <b>disabled.</b></div>
+          </ng-template>
+          
           <table class="table">
             <thead>
               <tr>
@@ -21,7 +27,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let row of history | async">
+              <tr *ngFor="let row of opts.history">
                 <td class="text-center">{{row.date}}</td>
                 <td class="text-center">{{row.campaign}}</td>
                 <td class="text-center">{{row.target}}</td>

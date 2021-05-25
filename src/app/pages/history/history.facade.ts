@@ -1,25 +1,24 @@
 import { Injectable } from '@angular/core';
 import { ApiRepository } from 'src/app/repository/ApiRepository';
 import { Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/internal/operators';
-import { History } from 'src/app/models/history';
+import { Optimization } from 'src/app/models/optimization';
 
 @Injectable({
     providedIn: 'root',
 })
 export class HistoryFacade {
 
-    private history : Observable<History[]>
+    private optimizations : Observable<Optimization>
 
     public constructor(private repository : ApiRepository) {
-        this.history = this.loadHistory().pipe(shareReplay(1))
+        this.optimizations = this.loadOptimizations()
     }
 
-    get history$() {
-        return this.history
+    get optimizations$() {
+        return this.optimizations
     }
 
-    private loadHistory() {
-        return this.repository.getHistory()
+    private loadOptimizations() {
+        return this.repository.getOptimizations()
     }
 }

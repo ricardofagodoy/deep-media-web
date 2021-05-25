@@ -2,7 +2,7 @@ export type Configuration = {
     id?: number,
     type: string,
     ads_account: string,
-    campaign: string,
+    ads_campaign: string,
     adcost_target: number,
     ga_account: string,
     ga_property: string,

@@ -1,4 +1,9 @@
-export type History = {
+export type Optimization = {
+    future: string,
+    history: History[]
+}
+
+type History = {
     date: string,
     campaign: string,
     target: number,

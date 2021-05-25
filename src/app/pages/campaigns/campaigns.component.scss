@@ -1,12 +1,11 @@
 .status-label {
-    font-size: 2em;
-    margin-bottom: 3% 0;
+    font-size: 1.5em;
+    margin-bottom: 6%;
 }
 
 .form-group {
     select {
-        width: 250px;
-        height: 50px;
+        min-width: 80%;
         font-size: 1.2em;
         font-weight: 600;
         background-image: linear-gradient(to bottom left, #344675, #263148, #344675);
