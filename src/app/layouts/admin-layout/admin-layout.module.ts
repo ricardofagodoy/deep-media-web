@@ -14,20 +14,24 @@ import { HistoryComponent } from 'src/app/pages/history/history.component';
 import { ConnectorComponent } from 'src/app/pages/connectors/connector.component';
 import { GoogleConnectorComponent } from 'src/app/pages/connectors/google/google.connector.component';
 
+import { NgxSpinnerModule } from "ngx-spinner";
+import { AccountPipe } from 'src/app/pages/campaigns/pipes/account.pipe';
+
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    NgxSpinnerModule
   ],
   declarations: [
     DashboardComponent,
     UserComponent,
     CampaignsComponent,
     HistoryComponent,
-    ConnectorComponent, GoogleConnectorComponent
+    ConnectorComponent, GoogleConnectorComponent, AccountPipe
   ]
 })
 export class AdminLayoutModule {}

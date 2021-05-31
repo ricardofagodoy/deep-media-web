@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
-import { AngularFireAuth } from '@angular/fire/auth';
-import firebase from 'firebase/app';
 import { ApiRepository } from 'src/app/repository/ApiRepository';
+import { SocialAuthService, GoogleLoginProvider } from 'angularx-social-login';
 
 @Component({
   selector: "app-google-connector",
@@ -10,33 +9,33 @@ import { ApiRepository } from 'src/app/repository/ApiRepository';
 export class GoogleConnectorComponent implements OnInit {
 
   public readonly SCOPES = [
-    'https://www.googleapis.com/auth/adwords', 
+    'https://www.googleapis.com/auth/adwords',
     'https://www.googleapis.com/auth/analytics.readonly'
   ]
 
   @Input()
-  public active : boolean
+  public active: boolean
 
   @Input()
-  public type : string
+  public type: string
 
   constructor(
-    private repository : ApiRepository, 
-    private auth: AngularFireAuth) {}
+    private repository: ApiRepository,
+    private authService: SocialAuthService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   connect() {
 
-    const provider = new firebase.auth.GoogleAuthProvider()
-    this.SCOPES.forEach(scope => provider.addScope(scope))
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID, {
+      scope: this.SCOPES.join(' ')
+    }).then(response => {
 
-    this.auth.signInWithPopup(provider).then(credentials => {
+      // Sends to backend
       this.repository.setConnector({
         type: this.type,
-        credentials: {
-          access_token: credentials.credential.toJSON()['oauthAccessToken'],
-          refresh_token: credentials.user.refreshToken
+        configuration: {
+          authorization_code: response.authorizationCode
         }
       }).subscribe(() => this.active = true)
     })

@@ -3,6 +3,7 @@ import { CampaignsFacade } from './campaigns.facade';
 import { Configuration } from 'src/app/models/configuration';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: "app-campaigns",
@@ -19,7 +20,8 @@ export class CampaignsComponent implements OnInit {
 
   constructor(
     private facade : CampaignsFacade, 
-    private toastr: ToastrService) {
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService) {
 
     facade.configuration$.subscribe(configuration => {
       this.configuration = configuration[0]
@@ -29,7 +31,9 @@ export class CampaignsComponent implements OnInit {
     this.connectorOptions = this.facade.loadConnectorOptions(this.TYPE)
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.spinner.show()
+  }
 
   create_new() {
     this.configuration = {
