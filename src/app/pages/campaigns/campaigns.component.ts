@@ -53,7 +53,10 @@ export class CampaignsComponent implements OnInit {
   }
 
   save() {
-    this.facade.saveConfiguration(this.configuration).subscribe(() => {
+    this.facade.saveConfiguration(this.configuration).subscribe((configuration) => {
+
+      this.configuration = configuration
+
       this.toastr.info('Success', 'All saved!', {
         positionClass: 'toast-bottom-center'
       })
