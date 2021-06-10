@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler } from '@angular/common/http';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { switchMap } from 'rxjs/internal/operators';
+import { switchMap, take } from 'rxjs/operators';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -10,8 +10,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
 
-    return this.auth.idToken.pipe(switchMap((idToken) => {
-
+    return this.auth.idToken.pipe(
+      take(1),
+      switchMap((idToken) => {
         const authReq = req.clone({
             headers: req.headers
               .set('Authorization', idToken)

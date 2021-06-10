@@ -8,7 +8,7 @@ export const environment = {
   backend_host: 'http://localhost:4200/api',
 
   firebase: {
-    apiKey: 'AIzaSyDp_kXj3TX3WscOvLpf_KjbSD_o_JsJgik',
+    apiKey: 'AIzaSyBpv1HBzMrC6J082RrwqwHrljP6DYPoztM',
     authDomain: 'deep-media.firebaseapp.com'
   },
 

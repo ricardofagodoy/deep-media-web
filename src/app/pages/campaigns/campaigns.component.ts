@@ -1,9 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { CampaignsFacade } from './campaigns.facade';
 import { Configuration } from 'src/app/models/configuration';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: "app-campaigns",
@@ -13,22 +14,25 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class CampaignsComponent implements OnInit {
 
   private readonly TYPE = 'google'
+  public isCollapsed = false;
+  
+  @ViewChild('configsAccordion')
+  private configsAccordion
 
-  public configuration : Configuration
-  public connectors : Observable<string[]>
-  public connectorOptions : any
+  public current_configuration: Configuration
+
+  public configurations: Observable<Configuration[]>
+  public connectors: Observable<string[]>
+  public connectorOptions: Observable<any>
 
   constructor(
-    private facade : CampaignsFacade, 
+    private facade: CampaignsFacade,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService) {
 
-    facade.configuration$.subscribe(configuration => {
-      this.configuration = configuration[0]
-    })
-
-    this.connectors = this.facade.loadConnectors()
-    this.connectorOptions = this.facade.loadConnectorOptions(this.TYPE)
+    // Bind all data observables
+    this.configurations = facade.loadConfiguration()
+    this.connectors = this.facade.loadConnectors().pipe(finalize(() => this.spinner.hide()))
   }
 
   ngOnInit() {
@@ -36,34 +40,40 @@ export class CampaignsComponent implements OnInit {
   }
 
   create_new() {
-    this.configuration = {
+
+    this.spinner.show()
+
+    this.current_configuration = {
       type: this.TYPE,
       adcost_target: 10
     } as any
   }
 
-  toggle_active() {
-    this.configuration.active = !this.configuration.active
+  edit(configuration) {
+
+    this.current_configuration = configuration
+
+    this.connectorOptions = this.facade.loadConnectorOptions(configuration.type).pipe(finalize(() => this.spinner.hide()))
+    this.configsAccordion.toggle(configuration.id)
+    this.spinner.show()
   }
 
-  is_all_valid() {
-    return this.configuration.adcost_target &&
-           this.configuration.ads_campaign &&
-           this.configuration.ga_metric
-  }
+  save(configuration) {
 
-  save() {
-    this.facade.saveConfiguration(this.configuration).subscribe((configuration) => {
-
-      this.configuration = configuration
-
+    this.facade.saveConfiguration(configuration).subscribe((configuration) => {
       this.toastr.info('Success', 'All saved!', {
+        positionClass: 'toast-bottom-center'
+      })
+
+      this.cancel(configuration.id)
+    }, () => {
+      this.toastr.info('Something went wrong - please try again!', 'Oh no!', {
         positionClass: 'toast-bottom-center'
       })
     })
   }
 
-  cancel() {
-    this.configuration = undefined
+  cancel(id) {
+    this.configsAccordion.toggle(id)
   }
 }

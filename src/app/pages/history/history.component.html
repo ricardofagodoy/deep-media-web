@@ -8,11 +8,13 @@
         </div>
         <div class=" card-body">
 
-          <div class="next-optimization" *ngIf="opts.future; else optimizationDisabled">Next Optimization scheduled to <b>{{opts.future}}</b></div>
+          <!--div class="next-optimization" *ngFor="let opt of opts">
+            Next Optimization scheduled to <b>{{opt.date}}</b>
+          </div>
           
           <ng-template #optimizationDisabled>
             <div class="next-optimization disabled">Optimizations are <b>disabled.</b></div>
-          </ng-template>
+          </ng-template-->
           
           <table class="table">
             <thead>
@@ -27,11 +29,11 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let row of opts.history">
+              <tr *ngFor="let row of opts">
                 <td class="text-center">{{row.date}}</td>
                 <td class="text-center">{{row.campaign}}</td>
-                <td class="text-center">{{row.target}}</td>
-                <td class="text-center">{{row.margin}}</td>
+                <td class="text-center">{{row.target * 100}}%</td>
+                <td class="text-center">{{row.margin * 100}}%</td>
                 <td class="text-center">{{row.optimize}}</td>
                 <td class="text-center">{{row.before}}</td>
                 <td class="text-center">{{row.after}}</td>

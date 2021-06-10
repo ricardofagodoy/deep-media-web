@@ -1,7 +1,13 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="ball-scale-ripple-multiple"
+  [fullScreen]="true">
+  <p style="color: white"> Loading... </p>
+</ngx-spinner>
+
 <div class=" content">
   <div class=" row">
     <div class=" col-md-12">
       <div class=" card">
+
         <div class=" card-header">
           <h5 class=" card-category">Settings</h5>
           <h2 class=" card-title">Campaign</h2>
@@ -16,174 +22,42 @@
 
         <!-- Configuration when connected -->
         <ng-template #connected>
+          <div class=" card-body">
 
-          <div *ngIf="configuration; else new_config">
-            <div *ngIf="connectorOptions | async as options; else loading">
-              <div class=" card-body">
+            <h4>Configure your campaigns to optimize</h4>
 
-                <h4>Configure your Google optimization</h4>
+            <!-- All Configurations -->
 
-                <form>
-                  <div class="row align-items-center text-center">
-                    <div class=" col-md-5">
-                      <div class=" form-group">
-                        <label> Ads Account </label>
-                        <br />
-                        <select name="ads_account" [(ngModel)]="configuration.ads_account" class="is-valid">
-                          <option *ngFor="let account of options.ads_accounts | keyvalue" [value]="account.key">
-                            {{account.key | account}}
-                          </option>
-                        </select>
-                      </div>
+            <ngb-accordion #configsAccordion="ngbAccordion" [animation]=true>
+              <ngb-panel *ngFor="let configuration of configurations | async" [id]="configuration.id">
+                <ng-template ngbPanelHeader let-opened="opened">
+                  <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <img alt="..." class=" avatar" src="assets/img/google_ads.png" />
+                      <span class="bold ml-3">Google Ads</span>
+
+                      <h5 class="m-0">{{configuration.ads_account }}</h5>
                     </div>
 
-                    <div class=" col-md-7">
-                      Google Ads account your campaing lives in
+                    <div *ngIf="!opened">
+                      <button class="btn btn-info btn-outline-primary ml-2" (click)="edit(configuration)">Edit</button>
+                      <button type="button" class="btn btn-danger btn-outline-secondary ml-2">Delete</button>
                     </div>
                   </div>
+                </ng-template>
 
-                  <div class=" row align-items-center text-center">
-                    <div class=" col-md-5">
-                      <div class=" form-group">
-                        <label> Ads Campaign </label>
-                        <br />
-                        <select name="ads_campaign" [(ngModel)]="configuration.ads_campaign"
-                          *ngIf="configuration.ads_account; else placeholder">
-                          <option *ngFor="let campaign of options.ads_accounts[configuration.ads_account]"
-                            [value]="campaign">
-                            {{campaign}}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class=" col-md-7">
-                      Google Ads campaign to be optimized
-                    </div>
-                  </div>
-
-                  <hr />
-
-                  <div class=" row align-items-center text-center">
-                    <div class=" col-md-5">
-                      <div class=" form-group">
-                        <label> Analytics Account </label>
-                        <br />
-                        <select name="ga_account" [(ngModel)]="configuration.ga_account">
-                          <option *ngFor="let account of options.ga_accounts | keyvalue" [value]="account.key">
-                            {{account.key}}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class=" col-md-7">
-                      Google Analytics account to pull sales metrics
-                    </div>
-                  </div>
-
-                  <div class=" row align-items-center text-center">
-                    <div class=" col-md-5">
-                      <div class=" form-group">
-                        <label> Analytics Property </label>
-                        <br />
-                        <select name="ga_property" [(ngModel)]="configuration.ga_property"
-                          *ngIf="configuration.ga_account; else placeholder">
-                          <option *ngFor="let property of options.ga_accounts[configuration.ga_account] | keyvalue"
-                            [value]="property.key">
-                            {{property.key}}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class=" col-md-7">
-                      Google Analytics property to pull sales metrics
-                    </div>
-                  </div>
-
-                  <div class=" row align-items-center text-center">
-                    <div class=" col-md-5">
-                      <div class=" form-group">
-                        <label> Analytics Metric </label>
-                        <br />
-                        <select name="ga_metric" [(ngModel)]="configuration.ga_metric"
-                          *ngIf="configuration.ga_property; else placeholder">
-                          <option
-                            *ngFor="let metric of options.ga_accounts[configuration.ga_account][configuration.ga_property]"
-                            [value]="metric">
-                            {{metric}}
-                          </option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div class=" col-md-7">
-                      Custom Metric for your sales value amount
-                    </div>
-                  </div>
-
-                  <ng-template #placeholder>
-                    <select disabled></select>
-                  </ng-template>
-
-
-                  <hr />
-
-                  <div class=" row align-items-center text-center">
-                    <div class=" col-md-5">
-                      <div class=" form-group">
-                        <label> AdCost Target (%) </label>
-                        <input name="adcost_target" class=" form-control" [(ngModel)]="configuration.adcost_target"
-                          type="number" min="0.1" max="500" step="0.1" />
-                      </div>
-                    </div>
-
-                    <div class=" col-md-7">
-                      Derired AdCost (investment divided by sales)
-                    </div>
-                  </div>
-
-                  <hr />
-
-                  <div class=" row align-items-center text-center">
-                    <div class=" col-md-5">
-                      <div class=" form-group">
-                        <label> Optimizations Status </label>
-                        <div [ngStyle]="{'color': configuration.active ? 'green' : 'red'}" class="status-label">
-                          {{configuration.active ? 'ON' : 'OFF'}}</div>
-
-                        <button class=" btn btn-fill btn-danger" *ngIf="configuration.active"
-                          (click)="toggle_active()">Disable</button>
-                        <button class=" btn btn-fill btn-info" *ngIf="!configuration.active"
-                          (click)="toggle_active()">Enable</button>
-                      </div>
-                    </div>
-
-                    <div class=" col-md-7">
-                      If you want us to optimize this campaign
-                    </div>
-                  </div>
-                </form>
-              </div>
-
-              <div class="card-footer">
-                <button class=" btn btn-fill btn-info" [disabled]="!is_all_valid()" (click)="save()">Save</button>
-                <!--button class=" btn btn-fill btn-danger" (click)="cancel()">Cancel</button-->
-              </div>
-            </div>
-
-            <ng-template #loading>
-
-              <div class=" card-body">
-                Loading configurations....
-              </div>
-
-              <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "default" color = "#fff" type = "ball-scale-ripple-multiple" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
-            
-            </ng-template>
-
+                <ng-template ngbPanelContent>
+                  <google-campaign *ngIf="connectorOptions | async as options" 
+                    [options]="options" 
+                    [configuration]="configuration"
+                    (saved)="save($event)"
+                    (canceled)="cancel(configuration.id)">
+                  </google-campaign>
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
           </div>
+
           <!-- New configuration -->
           <ng-template #new_config>
             <div class="card-body">
@@ -195,8 +69,7 @@
             </div>
           </ng-template>
         </ng-template>
-
       </div>
     </div>
-
   </div>
+</div>

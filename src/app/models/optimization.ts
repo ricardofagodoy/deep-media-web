@@ -1,9 +1,6 @@
 export type Optimization = {
-    future: string,
-    history: History[]
-}
-
-type History = {
+    id: string,
+    connector: string,
     date: string,
     campaign: string,
     target: number,

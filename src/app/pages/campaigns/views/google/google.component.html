@@ -1,0 +1,148 @@
+<div>
+    <div class="row align-items-center text-center">
+        <div class=" col-md-5">
+            <div class=" form-group">
+                <label> Ads Account </label>
+                <br />
+                <select name="ads_account" [(ngModel)]="configuration.ads_account" class="is-valid">
+                    <option *ngFor="let account of options.ads_accounts | keyvalue" [value]="account.key">
+                        {{account.key | account}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class=" col-md-7">
+            Google Ads account your campaing lives in
+        </div>
+    </div>
+
+    <div class=" row align-items-center text-center">
+        <div class=" col-md-5">
+            <div class=" form-group">
+                <label> Ads Campaign </label>
+                <br />
+                <select name="ads_campaign" [(ngModel)]="configuration.ads_campaign"
+                    *ngIf="configuration.ads_account; else placeholder">
+                    <option *ngFor="let campaign of options.ads_accounts[configuration.ads_account]" [value]="campaign">
+                        {{campaign}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class=" col-md-7">
+            Google Ads campaign to be optimized
+        </div>
+    </div>
+
+    <hr />
+
+    <div class=" row align-items-center text-center">
+        <div class=" col-md-5">
+            <div class=" form-group">
+                <label> Analytics Account </label>
+                <br />
+                <select name="ga_account" [(ngModel)]="configuration.ga_account">
+                    <option *ngFor="let account of options.ga_accounts | keyvalue" [value]="account.key">
+                        {{account.value.name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class=" col-md-7">
+            Google Analytics account to pull sales metrics
+        </div>
+    </div>
+
+    <div class=" row align-items-center text-center">
+        <div class=" col-md-5">
+            <div class=" form-group">
+                <label> Analytics Property </label>
+                <br />
+                <select name="ga_property" [(ngModel)]="configuration.ga_property"
+                    *ngIf="configuration.ga_account; else placeholder">
+                    <option *ngFor="let property of options.ga_accounts[configuration.ga_account].properties | keyvalue"
+                        [value]="property.key">
+                        {{property.key}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class=" col-md-7">
+            Google Analytics property to pull sales metrics
+        </div>
+    </div>
+
+    <div class=" row align-items-center text-center">
+        <div class=" col-md-5">
+            <div class=" form-group">
+                <label> Analytics Metric </label>
+                <br />
+                <select name="ga_metric" [(ngModel)]="configuration.ga_metric"
+                    *ngIf="configuration.ga_property; else placeholder">
+                    <option
+                        *ngFor="let metric of options.ga_accounts[configuration.ga_account].properties[configuration.ga_property]"
+                        [value]="metric.index">
+                        {{metric.name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class=" col-md-7">
+            Custom Metric for your sales value amount
+        </div>
+    </div>
+
+    <ng-template #placeholder>
+        <select disabled></select>
+    </ng-template>
+
+
+    <hr />
+
+    <div class="row align-items-center text-center">
+        <div class=" col-md-5">
+            <div class=" form-group">
+                <label> AdCost Target (%) </label>
+                <input name="adcost_target" class=" form-control text-center" [(ngModel)]="configuration.adcost_target"
+                    type="number" min="0.1" max="500" step="0.1" />
+            </div>
+        </div>
+
+        <div class=" col-md-7">
+            Derired AdCost (investment divided by sales)
+        </div>
+    </div>
+
+    <hr />
+
+    <div class=" row align-items-center text-center">
+        <div class=" col-md-5">
+            <div class=" form-group">
+                <span [ngStyle]="{'color': configuration.active ? 'green' : 'red'}" class="status-label">
+                    {{configuration.active ? 'ON' : 'OFF'}}</span>
+
+                <button class=" btn btn-fill btn-danger ml-5" *ngIf="configuration.active"
+                    (click)="toggle_active()">Disable</button>
+                <button class=" btn btn-fill btn-success ml-5" *ngIf="!configuration.active"
+                    (click)="toggle_active()">Enable</button>
+            </div>
+        </div>
+
+        <div class=" col-md-7">
+            If you want us to optimize this campaign
+        </div>
+    </div>
+
+    <br />
+
+    <div class="card-footer">
+        <button class=" btn btn-fill btn-info" [disabled]="!is_all_valid()"
+            (click)="saved.emit(configuration)">Save</button>
+        <button class="btn btn-fill btn-danger" (click)="canceled.emit()">Cancel</button>
+    </div>
+</div>
