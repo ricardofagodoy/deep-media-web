@@ -2,29 +2,16 @@ import { Injectable } from '@angular/core';
 import { ApiRepository } from 'src/app/repository/ApiRepository';
 import { Observable } from 'rxjs';
 import { Configuration } from 'src/app/models/configuration';
-import { shareReplay, finalize } from 'rxjs/internal/operators';
 
 @Injectable({
     providedIn: 'root',
 })
 export class CampaignsFacade {
 
-    private connectorOptions : Map<string, Observable<any>>
-
-    public constructor(private repository : ApiRepository) {
-        this.connectorOptions = new Map()
-    }
+    public constructor(private repository : ApiRepository) {}
 
     public loadConnectorOptions(type : string) : Observable<any> {
-
-        if (this.connectorOptions[type])
-            return this.connectorOptions[type]
-
-        this.connectorOptions[type] = this.repository
-            .getConnectorOptions(type)
-            .pipe(shareReplay(1))
-
-        return this.connectorOptions[type]
+        return this.repository.getConnectorOptions(type)
     }
 
     public loadConnectors() {
@@ -37,5 +24,9 @@ export class CampaignsFacade {
 
     public saveConfiguration(configuration : Configuration) {
         return this.repository.setConfigurations(configuration)
+    }
+
+    public deleteConfiguration(id : string) {
+        return this.repository.deleteConfiguration(id)
     }
 }

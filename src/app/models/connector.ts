@@ -1,4 +1,5 @@
 export type Connector = {
     type: string,
-    configuration: any
+    configuration: any,
+    name?: string
 }

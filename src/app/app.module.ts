@@ -29,7 +29,9 @@ import { ComponentsModule } from './layouts/admin-layout/components/components.m
     NgbModule,
     RouterModule,
     AppRoutingModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      preventDuplicates: true
+    }),
     AngularFireModule.initializeApp(environment.firebase),
     SocialLoginModule
   ],

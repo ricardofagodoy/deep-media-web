@@ -1,6 +1,7 @@
 export type Configuration = {
     id?: number,
     type: string,
+    name: string,
     ads_account: string,
     ads_campaign: string,
     adcost_target: number,

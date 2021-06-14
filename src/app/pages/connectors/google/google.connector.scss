@@ -1,11 +1,13 @@
-::ng-deep ngb-accordion {
-    .card, .card:first-of-type {
-        border: 1px solid #cfcee0 !important;
-    }
-}
+.icons {
+    position: absolute;
+    display: flex;
+    top: 4%;
+    right: 4%;
 
-.card .avatar {
-    margin-bottom: 0;
+    div {
+        font-size: 2em;
+        cursor: pointer;
+    }
 }
 
 :host ::ng-deep {

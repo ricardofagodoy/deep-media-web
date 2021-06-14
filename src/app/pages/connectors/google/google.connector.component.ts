@@ -1,12 +1,18 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { ApiRepository } from 'src/app/repository/ApiRepository';
 import { SocialAuthService, GoogleLoginProvider } from 'angularx-social-login';
+import { ToastrService } from 'ngx-toastr';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { finalize } from "rxjs/operators";
 
 @Component({
   selector: "app-google-connector",
-  templateUrl: "google.connector.component.html"
+  templateUrl: "google.connector.component.html",
+  styleUrls: ["google.connector.scss"]
 })
 export class GoogleConnectorComponent implements OnInit {
+
+  private readonly type = 'google'
 
   public readonly SCOPES = [
     'https://www.googleapis.com/auth/adwords',
@@ -16,12 +22,11 @@ export class GoogleConnectorComponent implements OnInit {
   @Input()
   public active: boolean
 
-  @Input()
-  public type: string
-
   constructor(
     private repository: ApiRepository,
-    private authService: SocialAuthService) { }
+    private authService: SocialAuthService,
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit() { }
 
@@ -31,13 +36,64 @@ export class GoogleConnectorComponent implements OnInit {
       scope: this.SCOPES.join(' ')
     }).then(response => {
 
+      this.spinner.show()
+
       // Sends to backend
       this.repository.setConnector({
         type: this.type,
         configuration: {
           authorization_code: response.authorizationCode
         }
-      }).subscribe(() => this.active = true)
+      }).pipe(
+        finalize(() => this.spinner.hide())
+      ).subscribe(() => {
+        this.active = true
+
+        this.toastr.success('Google Ads connected.', 'Success', {
+          positionClass: 'toast-bottom-center'
+        })
+      }, () => {
+        this.toastr.error('Something went wrong, try again or contact support.', 'Error', {
+          positionClass: 'toast-bottom-center'
+        })
+      })
+    })
+  }
+
+  disconnect() {
+
+    this.spinner.show()
+
+    this.repository.deleteConnector(this.type).pipe(
+      finalize(() => this.spinner.hide())
+    ).subscribe(() => {
+
+      this.active = false
+
+      this.toastr.success('Google Ads removed.', 'Success', {
+        positionClass: 'toast-bottom-center'
+      })
+    }, () => {
+      this.toastr.error('Something went wrong, try again in a few seconds.', 'Error', {
+        positionClass: 'toast-bottom-center'
+      })
+    })
+  }
+
+  refresh() {
+
+    this.spinner.show()
+
+    this.repository.refreshConnector(this.type).pipe(
+      finalize(() => this.spinner.hide())
+    ).subscribe(() => {
+      this.toastr.success('Google Ads refreshed.', 'Success', {
+        positionClass: 'toast-bottom-center'
+      })
+    }, () => {
+      this.toastr.error('Something went wrong, try again in a few seconds.', 'Error', {
+        positionClass: 'toast-bottom-center'
+      })
     })
   }
 }

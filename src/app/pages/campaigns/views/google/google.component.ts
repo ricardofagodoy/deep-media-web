@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from "@angular/core";
 import { Configuration } from 'src/app/models/configuration';
 
 @Component({
@@ -6,7 +6,9 @@ import { Configuration } from 'src/app/models/configuration';
   templateUrl: "google.component.html",
   styleUrls: ["google.component.scss"]
 })
-export class GoogleCampaignComponent implements OnInit {
+export class GoogleCampaignComponent implements OnInit, OnChanges {
+
+    private readonly TYPE = 'google'
 
     @Input()
     public configuration : Configuration
@@ -22,14 +24,25 @@ export class GoogleCampaignComponent implements OnInit {
 
     constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
+
+  ngOnChanges() {
+    // New Configuration
+    if (!this.configuration)
+      this.configuration = {
+        type: this.TYPE,
+        adcost_target: 10
+      } as any
+  }
 
   toggle_active() {
     this.configuration.active = !this.configuration.active
   }
 
   is_all_valid() {
-    return this.configuration.adcost_target &&
+    return this.configuration.name && 
+      this.configuration.adcost_target &&
       this.configuration.ads_campaign &&
       this.configuration.ga_metric
   }

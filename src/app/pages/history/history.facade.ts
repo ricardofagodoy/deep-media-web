@@ -21,4 +21,8 @@ export class HistoryFacade {
     private loadOptimizations() {
         return this.repository.getOptimizations()
     }
+
+    public loadFutureOptimizations() {
+        return this.repository.getFutureOptimizations()
+    }
 }

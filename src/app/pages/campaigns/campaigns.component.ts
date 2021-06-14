@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { CampaignsFacade } from './campaigns.facade';
 import { Configuration } from 'src/app/models/configuration';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { finalize } from 'rxjs/operators';
+import { finalize, catchError } from 'rxjs/operators';
 
 @Component({
   selector: "app-campaigns",
@@ -13,15 +13,14 @@ import { finalize } from 'rxjs/operators';
 })
 export class CampaignsComponent implements OnInit {
 
-  private readonly TYPE = 'google'
-  public isCollapsed = false;
-  
+  public readonly AVAILABLE_CONNECTORS = {
+    'google': 'Google Ads'
+  }
+
   @ViewChild('configsAccordion')
   private configsAccordion
 
-  public current_configuration: Configuration
-
-  public configurations: Observable<Configuration[]>
+  public configurations: Configuration[]
   public connectors: Observable<string[]>
   public connectorOptions: Observable<any>
 
@@ -29,51 +28,98 @@ export class CampaignsComponent implements OnInit {
     private facade: CampaignsFacade,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService) {
-
-    // Bind all data observables
-    this.configurations = facade.loadConfiguration()
-    this.connectors = this.facade.loadConnectors().pipe(finalize(() => this.spinner.hide()))
   }
 
   ngOnInit() {
     this.spinner.show()
+
+    // Load data
+    this.facade.loadConfiguration().subscribe(configurations => {
+      this.configurations = this.sort_configurations(configurations)
+    })
+
+    // Bind
+    this.connectors = this.facade.loadConnectors()
+      .pipe(
+        finalize(() => this.spinner.hide()),
+        catchError(() => {
+
+          this.toastr.error('Something went wrong, please try again.', 'Oh no!', {
+            positionClass: 'toast-bottom-center'
+          })
+
+          return EMPTY
+        })
+      )
   }
 
-  create_new() {
-
-    this.spinner.show()
-
-    this.current_configuration = {
-      type: this.TYPE,
-      adcost_target: 10
-    } as any
+  create_new(type) {
+    this.edit({
+      type: type
+    })
   }
 
   edit(configuration) {
-
-    this.current_configuration = configuration
-
-    this.connectorOptions = this.facade.loadConnectorOptions(configuration.type).pipe(finalize(() => this.spinner.hide()))
-    this.configsAccordion.toggle(configuration.id)
     this.spinner.show()
+    this.connectorOptions = this.facade.loadConnectorOptions(configuration.type).pipe(finalize(() => this.spinner.hide()))
+    this.configsAccordion.collapseAll()
+    this.configsAccordion.expand('panel-' + (configuration.id || 'new'))
   }
 
-  save(configuration) {
+  delete(id) {
 
-    this.facade.saveConfiguration(configuration).subscribe((configuration) => {
-      this.toastr.info('Success', 'All saved!', {
+    this.spinner.show()
+
+    this.facade.deleteConfiguration(id).pipe(finalize(() => this.spinner.hide()))
+    .subscribe(() => {
+      this.toastr.success('Success', 'Configuration deleted.', {
         positionClass: 'toast-bottom-center'
       })
 
-      this.cancel(configuration.id)
+      // Update list
+      this.configurations = this.sort_configurations(this.configurations.filter(c => c.id != id))
+
     }, () => {
-      this.toastr.info('Something went wrong - please try again!', 'Oh no!', {
-        positionClass: 'toast-bottom-center'
+      this.toastr.error('Something went wrong, please try again.', 'Oh no!', {
+        positionClass: 'toast-top-center'
       })
     })
   }
 
+  save(configuration) {
+
+    this.spinner.show()
+
+    this.facade.saveConfiguration(configuration).pipe(finalize(() => this.spinner.hide()))
+    .subscribe((saved_configuration) => {
+      this.toastr.success('Success', 'All saved.', {
+        positionClass: 'toast-bottom-center'
+      })
+
+      // Update list
+      this.configurations = this.sort_configurations([
+        ...this.configurations.filter(c => c.id != saved_configuration.id),
+        saved_configuration
+      ])
+
+      // Close
+      this.configsAccordion.collapseAll()
+      
+    }, () => {
+      this.toastr.error('Something went wrong, please try again.', 'Oh no!', {
+        positionClass: 'toast-top-center'
+      })
+    })
+  }
+
+  private sort_configurations(configurations : Configuration[]) {
+    return configurations.sort((a, b) => {
+      if (a.name < b.name) return -1
+      return a.name > b.name ? 1 : 0
+    })
+  }
+
   cancel(id) {
-    this.configsAccordion.toggle(id)
+    this.configsAccordion.collapse('panel-' + id)
   }
 }

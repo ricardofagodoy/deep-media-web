@@ -1,21 +1,24 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="ball-scale-ripple-multiple"
+  fullScreen="true">
+  <p style="color: white"> Loading... </p>
+</ngx-spinner>
+
 <div class=" content">
-  <div class=" row" *ngIf="optimizations | async as opts">
+  <div class="row">
     <div class=" col-md-12">
       <div class="card">
         <div class=" card-header">
           <h5 class=" card-category">Latest Executions</h5>
           <h2 class=" card-title">Optimizations</h2>
         </div>
-        <div class=" card-body">
+        <div class="card-body" *ngIf="optimizations | async as opts">
 
-          <!--div class="next-optimization" *ngFor="let opt of opts">
-            Next Optimization scheduled to <b>{{opt.date}}</b>
+          <!-- Future -->
+          <div class="next-optimization" *ngFor="let future of opts.future">
+            <b>[{{connector_names[future.type]}}]</b> Next optimization scheduled to <b>{{future.next_run}}</b>
           </div>
-          
-          <ng-template #optimizationDisabled>
-            <div class="next-optimization disabled">Optimizations are <b>disabled.</b></div>
-          </ng-template-->
-          
+
+          <!-- History -->
           <table class="table">
             <thead>
               <tr>
@@ -29,7 +32,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let row of opts">
+              <tr *ngFor="let row of opts.history">
                 <td class="text-center">{{row.date}}</td>
                 <td class="text-center">{{row.campaign}}</td>
                 <td class="text-center">{{row.target * 100}}%</td>

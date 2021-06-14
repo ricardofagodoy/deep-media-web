@@ -1,5 +1,5 @@
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="default" color="#fff" type="ball-scale-ripple-multiple"
-  [fullScreen]="true">
+  fullScreen="true">
   <p style="color: white"> Loading... </p>
 </ngx-spinner>
 
@@ -13,62 +13,85 @@
           <h2 class=" card-title">Campaign</h2>
         </div>
 
-        <!-- Message when not connected-->
-        <div *ngIf="(connectors | async)?.length == 0; else connected">
-          <div class="card-body">
+        <div class="card-body">
+
+          <!-- Message when not connected-->
+          <div *ngIf="(connectors | async)?.length == 0">
             You don't have any <a href="#/connectors">connectors</a> yet.
           </div>
-        </div>
 
-        <!-- Configuration when connected -->
-        <ng-template #connected>
-          <div class=" card-body">
+          <!-- Configuration when connected -->
+          <div *ngIf="(connectors | async)?.length > 0">
 
             <h4>Configure your campaigns to optimize</h4>
 
-            <!-- All Configurations -->
+            <ngb-accordion #configsAccordion="ngbAccordion" [animation]="true">
 
-            <ngb-accordion #configsAccordion="ngbAccordion" [animation]=true>
-              <ngb-panel *ngFor="let configuration of configurations | async" [id]="configuration.id">
+              <!-- All configurations -->
+              <ngb-panel *ngFor="let configuration of configurations" id="panel-{{configuration.id}}">
                 <ng-template ngbPanelHeader let-opened="opened">
                   <div class="d-flex align-items-center justify-content-between">
                     <div>
-                      <img alt="..." class=" avatar" src="assets/img/google_ads.png" />
-                      <span class="bold ml-3">Google Ads</span>
+                      <img alt="..." class=" avatar" src="assets/img/connectors/{{configuration.type}}.png" />
+                      <span class="bold ml-3">{{AVAILABLE_CONNECTORS[configuration.type]}}</span>
+                    </div>
 
-                      <h5 class="m-0">{{configuration.ads_account }}</h5>
+                    <div>
+                      <span class="m-0">{{configuration.name}}</span>
                     </div>
 
                     <div *ngIf="!opened">
                       <button class="btn btn-info btn-outline-primary ml-2" (click)="edit(configuration)">Edit</button>
-                      <button type="button" class="btn btn-danger btn-outline-secondary ml-2">Delete</button>
+
+
+                      <ng-template #popTitle><b>Are you sure?</b></ng-template>
+                      <ng-template #popContent>
+                        <button type="button" class="btn btn-danger" (click)="delete(configuration.id)">Confirm
+                          deletion</button>
+                      </ng-template>
+
+                      <button type="button" class="btn btn-danger btn-outline-secondary ml-2" [ngbPopover]="popContent"
+                        [popoverTitle]="popTitle">
+                        Delete
+                      </button>
                     </div>
                   </div>
                 </ng-template>
 
                 <ng-template ngbPanelContent>
-                  <google-campaign *ngIf="connectorOptions | async as options" 
-                    [options]="options" 
-                    [configuration]="configuration"
-                    (saved)="save($event)"
-                    (canceled)="cancel(configuration.id)">
+                  <google-campaign *ngIf="connectorOptions | async as options" [options]="options"
+                    [configuration]="configuration" (saved)="save($event)" (canceled)="cancel(configuration.id)">
+                  </google-campaign>
+                </ng-template>
+              </ngb-panel>
+
+              <!-- New configuration-->
+              <ngb-panel id="panel-new">
+                <ng-template ngbPanelHeader let-opened="opened">
+
+                  <h4>Create new configuration</h4>
+
+                  <div *ngIf="connectors | async as conn" class="d-flex align-items-center justify-content-between">
+                    <div>
+                      <img alt="..." class=" avatar" src="assets/img/connectors/{{conn}}.png" />
+                      <span class="bold ml-3">{{AVAILABLE_CONNECTORS[conn]}}</span>
+                    </div>
+
+                    <div *ngIf="!opened">
+                      <button class="btn btn-success ml-2" (click)="create_new(conn)">Create New</button>
+                    </div>
+                  </div>
+                </ng-template>
+
+                <ng-template ngbPanelContent>
+                  <google-campaign *ngIf="connectorOptions | async as options" [options]="options"
+                    (saved)="save($event)" (canceled)="cancel('new')">
                   </google-campaign>
                 </ng-template>
               </ngb-panel>
             </ngb-accordion>
           </div>
-
-          <!-- New configuration -->
-          <ng-template #new_config>
-            <div class="card-body">
-              You don't have any configuration yet.
-            </div>
-
-            <div class="card-footer">
-              <button class=" btn btn-fill btn-info" (click)="create_new()">New</button>
-            </div>
-          </ng-template>
-        </ng-template>
+        </div>
       </div>
     </div>
   </div>

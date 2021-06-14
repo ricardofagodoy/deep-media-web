@@ -1,10 +1,17 @@
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" 
+             size="default" 
+             color="#fff" 
+             type="ball-scale-ripple-multiple"
+             fullScreen="true">
+    <p style="color: white"> Loading... </p>
+</ngx-spinner>
 
 <div class=" content">
   <div class=" row" *ngIf="connectors | async as c">
 
     <!-- Google Ads connection -->
     <div class=" col-md-4">
-      <app-google-connector type="google" [active]="c.includes('google')"></app-google-connector>
+      <app-google-connector [active]="c.includes('google')"></app-google-connector>
     </div>
   </div>
 </div>

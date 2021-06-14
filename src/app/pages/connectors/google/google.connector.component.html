@@ -3,6 +3,11 @@
   <div class=" card-body">
     <p class=" card-text"></p>
     <div class=" author">
+
+      <div class="icons" *ngIf="active">
+        <div class="tim-icons icon-refresh-02" (click)="refresh()" title="Refresh connector"></div>
+      </div>
+
       <a href="javascript:void(0)">
         <img alt="..." class=" avatar" src="assets/img/google_ads.png" />
 
@@ -18,7 +23,19 @@
   <div class=" card-footer">
     <div class=" button-container">
 
-      <button type="button" class="btn btn-success" *ngIf="active;else connected">Connected!</button>
+      <ng-template #popTitle><b>Are you sure?</b></ng-template>
+      <ng-template #popContent>
+        <p>
+          Disconnecting will stop all optimizations for Google Ads and delete all configurations related to it!
+        </p>
+        <button type="button" class="btn btn-danger" (click)="disconnect()">Confirm disconnect</button>
+      </ng-template>
+
+      <button type="button" class="btn btn-danger" *ngIf="active;else connected" 
+          [ngbPopover]="popContent" 
+          [popoverTitle]="popTitle">
+        Disconnect
+      </button>
       
       <ng-template #connected>
         <button type="button" class="btn btn-info" (click)="connect()">Connect</button>

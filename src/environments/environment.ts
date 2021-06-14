@@ -8,12 +8,16 @@ export const environment = {
   backend_host: 'http://localhost:4200/api',
 
   firebase: {
-    apiKey: 'AIzaSyBpv1HBzMrC6J082RrwqwHrljP6DYPoztM',
-    authDomain: 'deep-media.firebaseapp.com'
+    apiKey: 'AIzaSyCUAgyIZ5xhsqOSrgxHFz2kfQ10QzVNNSk',
+    authDomain: 'deepmedia-2021-06-11.firebaseapp.com'
+  },
+
+  connectors: {
+    'google': 'Google Ads'
   },
 
   // Google connector
-  google_connector_client_id: '137965115946-ion66ah4psd2lurk2orksmufo7dg4djn.apps.googleusercontent.com'
+  google_connector_client_id: '948944098080-lab1o13nrfs1ug53js3a663pfls7d20f.apps.googleusercontent.com'
   
 };
 

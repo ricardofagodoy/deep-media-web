@@ -4,11 +4,15 @@ export const environment = {
   backend_host: 'https://deep-media-backend-an4ogx2ytq-rj.a.run.app',
 
   firebase: {
-    apiKey: 'AIzaSyDp_kXj3TX3WscOvLpf_KjbSD_o_JsJgik',
-    authDomain: 'deep-media.firebaseapp.com'
+    apiKey: 'AIzaSyCUAgyIZ5xhsqOSrgxHFz2kfQ10QzVNNSk',
+    authDomain: 'deepmedia-2021-06-11.firebaseapp.com'
   },
 
-    // Google connector
-    google_connector_client_id: '137965115946-ion66ah4psd2lurk2orksmufo7dg4djn.apps.googleusercontent.com'
+  connectors: {
+    'google': 'Google Ads'
+  },
+
+  // Google connector
+  google_connector_client_id: '948944098080-lab1o13nrfs1ug53js3a663pfls7d20f.apps.googleusercontent.com'
   
 };
