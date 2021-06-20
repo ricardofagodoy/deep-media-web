@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  backend_host: 'https://deep-media-backend-an4ogx2ytq-rj.a.run.app',
+  backend_host: 'https://backend.deepmediaco.com',
 
   firebase: {
     apiKey: 'AIzaSyCUAgyIZ5xhsqOSrgxHFz2kfQ10QzVNNSk',
