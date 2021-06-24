@@ -1,25 +1,36 @@
 import { Component, OnInit } from "@angular/core";
 import Chart from 'chart.js';
 import { DashboardFacade } from './dashboard.facade';
-import { take } from 'rxjs/internal/operators';
 import { Performance } from 'src/app/models/Performance';
+import { ToastrService } from "ngx-toastr";
+import { NgxSpinnerService } from "ngx-spinner";
+import { finalize } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { Configuration } from "src/app/models/configuration";
+import { Optimization } from "src/app/models/optimization";
 
 @Component({
   selector: "app-dashboard",
-  templateUrl: "dashboard.component.html"
+  templateUrl: "dashboard.component.html",
+  styleUrls: ["dashboard.styles.scss"]
 })
 export class DashboardComponent implements OnInit {
+
+  configurations : Observable<Configuration[]>
 
   private gradientChartOptionsConfigurationWithTooltipRed : any
   private gradientChartOptionsConfigurationWithTooltipGreen: any
 
   public datasets: any;
   public data: any;
+  public chart_index : number
   public myChartData;
   public clicked: boolean = false;
   public clicked1: boolean = true;
 
-  constructor(private facade: DashboardFacade) {
+  constructor(private facade: DashboardFacade, 
+              private toastr: ToastrService,
+              private spinner: NgxSpinnerService) {
 
     this.gradientChartOptionsConfigurationWithTooltipRed = {
 
@@ -48,12 +59,6 @@ export class DashboardComponent implements OnInit {
             drawBorder: false,
             color: 'rgba(29,140,248,0.0)',
             zeroLineColor: "transparent",
-          },
-          ticks: {
-            suggestedMin: 60,
-            suggestedMax: 125,
-            padding: 20,
-            fontColor: "#9a9a9a"
           }
         }],
 
@@ -123,22 +128,59 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
 
-    this.facade.performance$
-      .subscribe((performance: Performance) => {
-        this.buildDay(performance.today, performance.yeserday)
-        this.buildWeek(performance.week)
-        this.buildMonth(performance.month)
-      })
+    // Starts focusing on today
+    this.chart_index = 1
+
+    this.spinner.show()
+
+    this.configurations = this.facade.loadConfiguration()
+      .pipe(finalize(() => this.spinner.hide()))
   }
 
-  private buildDay(today, yesterday) {
+  loadConfigurationMetrics(configuration_id: string) {
 
-    // Data
-    var daily_labels = ['0h', '1h', '2h', '3h', '4h', '5h', '6h', '7h', '8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h', '21h', '22h', '23h'];
-    this.datasets = [yesterday, today];
-    const ad_cost_meta = Array(daily_labels.length).fill(100)
+    if (!configuration_id)
+      return
 
-    this.data = this.datasets[1];
+    this.spinner.show()
+
+    this.facade.loadPerformance(configuration_id)
+    .pipe(finalize(() => this.spinner.hide()))
+    .subscribe((performance: Performance) => {
+      this.buildDay(performance.today.reverse(), performance.yeserday.reverse())
+      // this.buildWeek(performance.week)
+      // this.buildMonth(performance.month)
+    }, 
+    (error) => {
+      this.toastr.error('Something went wrong, please try again.', 'Oh no!', {
+        positionClass: 'toast-bottom-center'
+      })
+    })
+  }
+
+  private buildDay(today: Optimization[], yesterday: Optimization[]) {
+
+    // Format data
+    const yesterday_target = yesterday.map(t => t.target*100)
+    const yesterday_label = yesterday.map(t => t.date.substr(11))
+    const yesterday_data = yesterday.map(t => t.ad_cost*100)
+
+    const today_target = today.map(t => t.target*100)
+    const today_label = today.map(t => t.date.substr(11))
+    const today_data = today.map(t => t.ad_cost*100)
+
+    this.datasets = [
+      {
+        target: yesterday_target,
+        label: yesterday_label,
+        data: yesterday_data
+      },
+      {
+        target: today_target,
+        label: today_label,
+        data: today_data
+      }
+    ]
 
     const canvas : any = document.getElementById("chartBig1");
     const ctx = canvas.getContext("2d");
@@ -151,7 +193,7 @@ export class DashboardComponent implements OnInit {
     var config = {
       type: 'line',
       data: {
-        labels: daily_labels,
+        labels: undefined,
         datasets: [{
           label: "Ad Cost",
           fill: true,
@@ -167,20 +209,24 @@ export class DashboardComponent implements OnInit {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: this.data,
-        }, {
+          data: undefined,
+        }, 
+        {
           type: 'line',
           label: 'Ad Cost Target',
           borderWidth: 1,
           borderColor: '#fff',
           pointRadius: 0,
-          data: ad_cost_meta,
+          data: undefined,
         }]
       },
       options: this.gradientChartOptionsConfigurationWithTooltipRed
     };
 
-    this.myChartData = new Chart(ctx, config);
+    this.myChartData = new Chart(ctx, config)
+
+    // Add data to chart
+    this.updateOptions()
   }
 
   private buildWeek(week_data) {
@@ -268,7 +314,10 @@ export class DashboardComponent implements OnInit {
   }
 
   public updateOptions() {
-    this.myChartData.data.datasets[0].data = this.data;
+    this.myChartData.data.datasets[0].data = this.datasets[this.chart_index].data
+    this.myChartData.data.datasets[1].data = this.datasets[this.chart_index].target
+    this.myChartData.data.labels = this.datasets[this.chart_index].label
+
     this.myChartData.update();
   }
 }

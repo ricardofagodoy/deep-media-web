@@ -1,6 +1,8 @@
+import { Optimization } from "./optimization";
+
 export type Performance = {
-    today : number[],
-    yeserday : number[],
-    week : number[],
-    month : number[]
+    today : Optimization[],
+    yeserday : Optimization[],
+    week : Optimization[],
+    month : Optimization[]
 }

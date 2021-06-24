@@ -1,0 +1,21 @@
+.welcome-card {
+    margin: 0 1%;
+}
+
+.form-group {
+    select {
+        min-width: 80%;
+        font-size: 1.2em;
+        font-weight: 600;
+        background-image: linear-gradient(to bottom left, #344675, #263148, #344675);
+        color: #fff;
+        border: 0;
+        border-radius: 5%;
+        padding: 8px 16px;
+        text-align-last: center;
+    }
+}
+
+.disabled-charts {
+    opacity: 0.5;
+}

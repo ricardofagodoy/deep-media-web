@@ -9,17 +9,14 @@ import { shareReplay } from 'rxjs/internal/operators';
 })
 export class DashboardFacade {
 
-    private performance : Observable<Performance>
-
     public constructor(private repository : ApiRepository) {
-        this.performance = this.loadPerformance().pipe(shareReplay(1))
     }
 
-    get performance$() {
-        return this.performance
+    public loadConfiguration() {
+        return this.repository.getConfigurations()
     }
 
-    private loadPerformance() {
-        return this.repository.getPerformance()
+    public loadPerformance(configuration_id: string) {
+        return this.repository.getPerformance(configuration_id)
     }
 }

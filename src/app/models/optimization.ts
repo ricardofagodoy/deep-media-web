@@ -3,8 +3,10 @@ export type Optimization = {
     connector: string,
     date: string,
     campaign: string,
+    campaign_id: string,
     target: number,
     margin: number,
+    ad_cost: number,
     optimize: string,
     before: number,
     after: number

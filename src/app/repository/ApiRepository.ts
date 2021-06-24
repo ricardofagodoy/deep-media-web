@@ -14,9 +14,9 @@ export class ApiRepository {
 
     constructor(private http: HttpClient) {}
 
-    getPerformance(): Observable<Performance> {
+    getPerformance(configuration_id: string): Observable<Performance> {
         return this.http.get<Performance>(
-            `${environment.backend_host}/performance`
+            `${environment.backend_host}/performance/${configuration_id}`
         )
     }
 
