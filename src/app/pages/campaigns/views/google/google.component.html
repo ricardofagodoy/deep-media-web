@@ -18,7 +18,8 @@
             <div class=" form-group">
                 <label> Ads Account </label>
                 <br />
-                <select name="ads_account" [(ngModel)]="configuration.ads_account" class="is-valid">
+                <select name="ads_account" [(ngModel)]="configuration.ads_account" class="is-valid"
+                        (change)="configuration.ads_campaign=undefined">
                     <option *ngFor="let account of options.ads_accounts | keyvalue" [value]="account.key">
                         {{account.key | account}}
                     </option>
@@ -57,7 +58,8 @@
             <div class=" form-group">
                 <label> Analytics Account </label>
                 <br />
-                <select name="ga_account" [(ngModel)]="configuration.ga_account">
+                <select name="ga_account" [(ngModel)]="configuration.ga_account"
+                        (change)="configuration.ga_property=undefined;configuration.ga_profile=undefined;configuration.ga_metric=undefined">
                     <option *ngFor="let account of options.ga_accounts | keyvalue" [value]="account.key">
                         {{account.value.name}}
                     </option>
@@ -76,6 +78,7 @@
                 <label> Analytics Property </label>
                 <br />
                 <select name="ga_property" [(ngModel)]="configuration.ga_property"
+                    (change)="configuration.ga_profile=undefined;configuration.ga_metric=undefined"
                     *ngIf="configuration.ga_account; else placeholder">
                     <option *ngFor="let property of options.ga_accounts[configuration.ga_account].properties | keyvalue"
                         [value]="property.key">
@@ -93,12 +96,33 @@
     <div class=" row align-items-center text-center">
         <div class=" col-md-5">
             <div class=" form-group">
+                <label> Analytics Profile (View) </label>
+                <br />
+                <select name="ga_metric" [(ngModel)]="configuration.ga_profile"
+                    *ngIf="configuration.ga_property; else placeholder">
+                    <option
+                        *ngFor="let profile of options.ga_accounts[configuration.ga_account].properties[configuration.ga_property].profiles"
+                        [value]="profile.id">
+                        {{profile.name}}
+                    </option>
+                </select>
+            </div>
+        </div>
+
+        <div class=" col-md-7">
+            Google Analytics profile (View) to pull sales metrics
+        </div>
+    </div>
+
+    <div class=" row align-items-center text-center">
+        <div class=" col-md-5">
+            <div class=" form-group">
                 <label> Analytics Metric </label>
                 <br />
                 <select name="ga_metric" [(ngModel)]="configuration.ga_metric"
                     *ngIf="configuration.ga_property; else placeholder">
                     <option
-                        *ngFor="let metric of options.ga_accounts[configuration.ga_account].properties[configuration.ga_property]"
+                        *ngFor="let metric of options.ga_accounts[configuration.ga_account].properties[configuration.ga_property].custom_metrics"
                         [value]="metric.index">
                         {{metric.name}}
                     </option>

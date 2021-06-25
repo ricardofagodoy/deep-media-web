@@ -44,8 +44,8 @@ export class ApiRepository {
         )
     }
 
-    setConnector(connector : Connector): Observable<unknown> {
-        return this.http.post<unknown>(
+    setConnector(connector : Connector): Observable<string> {
+        return this.http.post<string>(
             `${environment.backend_host}/connectors`,
             connector
         )

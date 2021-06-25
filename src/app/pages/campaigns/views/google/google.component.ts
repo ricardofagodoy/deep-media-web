@@ -46,6 +46,7 @@ export class GoogleCampaignComponent implements OnInit, OnChanges {
     return this.configuration.name && 
       this.configuration.adcost_target &&
       this.configuration.ads_campaign &&
+      this.configuration.ga_profile &&
       this.configuration.ga_metric
   }
 }

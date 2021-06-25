@@ -4,8 +4,8 @@ import { DashboardFacade } from './dashboard.facade';
 import { Performance } from 'src/app/models/Performance';
 import { ToastrService } from "ngx-toastr";
 import { NgxSpinnerService } from "ngx-spinner";
-import { finalize } from "rxjs/operators";
-import { Observable } from "rxjs";
+import { catchError, finalize } from "rxjs/operators";
+import { EMPTY, Observable } from "rxjs";
 import { Configuration } from "src/app/models/configuration";
 import { Optimization } from "src/app/models/optimization";
 
@@ -134,7 +134,17 @@ export class DashboardComponent implements OnInit {
     this.spinner.show()
 
     this.configurations = this.facade.loadConfiguration()
-      .pipe(finalize(() => this.spinner.hide()))
+      .pipe(
+        finalize(() => this.spinner.hide()),
+        catchError(() => {
+
+          this.toastr.error('Something went wrong, please try again.', 'Oh no!', {
+            positionClass: 'toast-bottom-center'
+          })
+  
+          return EMPTY
+        })
+      )
   }
 
   loadConfigurationMetrics(configuration_id: string) {

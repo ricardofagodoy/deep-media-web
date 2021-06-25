@@ -52,9 +52,13 @@ export class GoogleConnectorComponent implements OnInit {
         this.toastr.success('Google Ads connected.', 'Success', {
           positionClass: 'toast-bottom-center'
         })
-      }, () => {
-        this.toastr.error('Something went wrong, try again or contact support.', 'Error', {
-          positionClass: 'toast-bottom-center'
+      }, (error) => {
+
+        const message = error?.error?.error?.join(', ') || 'Internal error - please try again'
+
+        this.toastr.error(message, 'Error', {
+          positionClass: 'toast-bottom-center',
+          disableTimeOut: true
         })
       })
     })
