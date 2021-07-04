@@ -15,7 +15,7 @@
 
           <!-- Future -->
           <div class="next-optimization" *ngFor="let future of opts.future">
-            <b>[{{connector_names[future.type]}}]</b> Next optimization scheduled to <b>{{future.next_run}}</b>
+            <b>[{{connector_names[future.type]}}]</b> Next optimization scheduled to <b>{{future.next_run | date: 'dd/MM/yyyy HH:mm'}}</b>
           </div>
 
           <!-- History -->
@@ -23,9 +23,9 @@
             <thead>
               <tr>
                 <th class="text-center">Date/Hour</th>
+                <th class="text-center">Account</th>
                 <th class="text-center">Campaign</th>
                 <th class="text-center">Target AdCost</th>
-                <th class="text-center">Margin</th>
                 <th class="text-center">Optimization Metric</th>
                 <th class="text-center">Before</th>
                 <th class="text-center">After</th>
@@ -33,10 +33,10 @@
             </thead>
             <tbody>
               <tr *ngFor="let row of opts.history">
-                <td class="text-center">{{row.date}}</td>
+                <td class="text-center">{{row.date | date: 'dd/MM/yyyy HH:mm'}}</td>
+                <td class="text-center">{{row.account | account}}</td>
                 <td class="text-center">{{row.campaign}}</td>
-                <td class="text-center">{{row.target * 100}}%</td>
-                <td class="text-center">{{row.margin * 100}}%</td>
+                <td class="text-center">{{row.target}}%</td>
                 <td class="text-center">{{row.optimize}}</td>
                 <td class="text-center">{{row.before}}</td>
                 <td class="text-center">{{row.after}}</td>

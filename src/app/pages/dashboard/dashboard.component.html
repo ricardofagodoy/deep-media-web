@@ -24,22 +24,25 @@
     </div>
   </div>
 
-  <!-- Yesterday/Today Chart -->
   <ng-template [ngIf]="(configurations | async)?.length > 0">
+
+    <!-- Yesterday/Today Chart -->
     <div class=" row">
       <div class=" col-12">
         <div class=" card card-chart">
           <div class=" card-header">
+
             <div class=" row align-items-center text-center">
-              <div class=" col-sm-3 text-left">
+
+              <div class=" col-lg-3 text-left">
                 <h5 class=" card-category">Campaign Ad Cost</h5>
-                <h2 class=" card-title">Performance</h2>
+                <h2 class=" card-title">Recent</h2>
               </div>
 
-              <div class="col-sm-6">
+              <div class="col-lg-6">
                 <div class=" form-group">
-                  <br />
-                  <select #configs_drop name="configs" class="is-valid" (change)="loadConfigurationMetrics(configs_drop.value)">
+                  <select #configs_drop name="configs" class="is-valid"
+                    (change)="loadRecentTicks(configs_drop.value)">
                     <option value="">Choose a configuration</option>
                     <option *ngFor="let configuration of configurations | async" [value]="configuration.id">
                       {{configuration.name}}
@@ -48,85 +51,78 @@
                 </div>
               </div>
 
-              <div class=" col-sm-3">
-                <div class=" btn-group btn-group-toggle float-right" data-toggle="buttons">
+              <div class=" col-lg-3">
+                <div class=" btn-group btn-group-toggle" data-toggle="buttons">
                   <label class=" btn btn-sm btn-danger btn-simple"
-                    (click)="chart_index=0;updateOptions();clicked=true;clicked1=false"
-                    [ngClass]="{'active':clicked===true}">
+                    (click)="updateRecentChart(0)"
+                    [ngClass]="{'active':chart_index==0}">
                     <input checked="checked" name="options" type="radio" />
-
-                    <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                    <span>
                       Yesterday
                     </span>
-                    <span class=" d-block d-sm-none">
-                      <i class=" tim-icons icon-minimal-left"> </i>
-                    </span>
                   </label>
+
                   <label class=" btn btn-sm btn-danger btn-simple"
-                    (click)="chart_index=1;updateOptions();clicked=false;clicked1=true"
-                    [ngClass]="{'active':clicked1===true}">
+                    (click)="updateRecentChart(1)"
+                    [ngClass]="{'active':chart_index==1}">
                     <input class=" d-none d-sm-none" name="options" type="radio" />
 
-                    <span class=" d-none d-sm-block d-md-block d-lg-block d-xl-block">
+                    <span>
                       Today
                     </span>
-                    <span class=" d-block d-sm-none">
-                      <i class=" tim-icons icon-minimal-down"> </i>
-                    </span>
                   </label>
-                  <!-- <label class=" btn btn-sm btn-danger btn-simple" (click)="data=datasets[2];updateOptions();clicked=false;clicked1=false;" [ngClass]="{'active':clicked2===true}">
-                    <input class=" d-none" name="options" type="radio" />
-
-                    <span
-                      class=" d-none d-sm-block d-md-block d-lg-block d-xl-block"
-                    >
-                      Month
-                    </span>
-                    <span class=" d-block d-sm-none">
-                      <i class=" tim-icons icon-tap-02"> </i>
-                    </span>
-                  </label> -->
                 </div>
               </div>
             </div>
           </div>
           <div class=" card-body">
-            <div class=" chart-area"><canvas id="chartBig1"> </canvas></div>
+            <div class=" chart-area">
+              <canvas id="recentChart"></canvas>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Week / Month Charts -->
-    <div class=" row disabled-charts">
-
-      <div class=" col-lg-6">
+    <!-- Custom date Chart -->
+    <div class=" row">
+      <div class=" col-12">
         <div class=" card card-chart">
           <div class=" card-header">
-            <h5 class=" card-category">Campaign Ad Cost</h5>
-            <h3 class=" card-title">
-              Week
-            </h3>
-          </div>
-          <div class=" card-body">
-            <div class=" chart-area"><canvas id="chartLineGreen"> </canvas></div>
-          </div>
-        </div>
-      </div>
+            <div class=" row align-items-center text-center">
 
-      <div class=" col-lg-6">
-        <div class=" card card-chart">
-          <div class=" card-header">
-            <h5 class=" card-category">Campaign Ad Cost</h5>
-            <h3 class=" card-title">
-              Month
-            </h3>
+              <div class=" col-lg-3 text-left">
+                <h5 class=" card-category">Campaign Ad Cost</h5>
+                <h2 class=" card-title">Custom</h2>
+              </div>
+
+              <div class="col-lg-6">
+                <div class=" form-group">
+                  <select #configs_custom_drop name="configs_custom" class="is-valid"
+                    (change)="chooseConfigurationIdCustom(configs_custom_drop.value)">
+                    <option value="">Choose a configuration</option>
+                    <option *ngFor="let configuration of configurations | async" [value]="configuration.id">
+                      {{configuration.name}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class=" col-lg-3">
+                <calendar-popup (valid)="receiveDatePickerEvent($event)">
+                </calendar-popup>
+              </div>
+            </div>
           </div>
+
           <div class=" card-body">
-            <div class=" chart-area"><canvas id="chartLineGreenMonth"> </canvas></div>
+            <div class=" chart-area">
+              <canvas id="customChart"></canvas>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
   </ng-template>
 </div>

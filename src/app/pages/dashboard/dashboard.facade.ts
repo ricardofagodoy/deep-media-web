@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiRepository } from 'src/app/repository/ApiRepository';
 import { Observable } from 'rxjs';
-import { Performance } from 'src/app/models/Performance';
 import { shareReplay } from 'rxjs/internal/operators';
 
 @Injectable({
@@ -16,7 +15,7 @@ export class DashboardFacade {
         return this.repository.getConfigurations()
     }
 
-    public loadPerformance(configuration_id: string) {
-        return this.repository.getPerformance(configuration_id)
+    public loadTicks(configuration_id: string, data?) {
+        return this.repository.getTicks(configuration_id, data)
     }
 }

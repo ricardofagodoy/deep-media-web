@@ -1,13 +1,14 @@
 import { Component, OnInit } from "@angular/core";
-import Chart from 'chart.js';
 import { DashboardFacade } from './dashboard.facade';
-import { Performance } from 'src/app/models/Performance';
+import { Tick } from 'src/app/models/tick';
+import { Chart } from 'chart.js';
 import { ToastrService } from "ngx-toastr";
 import { NgxSpinnerService } from "ngx-spinner";
 import { catchError, finalize } from "rxjs/operators";
 import { EMPTY, Observable } from "rxjs";
 import { Configuration } from "src/app/models/configuration";
-import { Optimization } from "src/app/models/optimization";
+
+const LOCALE = 'pt'
 
 @Component({
   selector: "app-dashboard",
@@ -18,118 +19,22 @@ export class DashboardComponent implements OnInit {
 
   configurations : Observable<Configuration[]>
 
-  private gradientChartOptionsConfigurationWithTooltipRed : any
-  private gradientChartOptionsConfigurationWithTooltipGreen: any
-
+  // Yesterday/Today chart
   public datasets: any;
-  public data: any;
   public chart_index : number
-  public myChartData;
-  public clicked: boolean = false;
-  public clicked1: boolean = true;
+  public recentChart
+
+  // Custom chart
+  private configuration_id_custom : string
+  private dates : any
+  public customChart
 
   constructor(private facade: DashboardFacade, 
               private toastr: ToastrService,
               private spinner: NgxSpinnerService) {
-
-    this.gradientChartOptionsConfigurationWithTooltipRed = {
-
-      maintainAspectRatio: false,
-
-      legend: {
-        display: true,
-        position: 'top'
-      },
-
-      tooltips: {
-        backgroundColor: '#f5f5f5',
-        titleFontColor: '#333',
-        bodyFontColor: '#666',
-        bodySpacing: 4,
-        xPadding: 12,
-        mode: "nearest",
-        intersect: 0,
-        position: "nearest"
-      },
-      responsive: true,
-      scales: {
-        yAxes: [{
-          barPercentage: 1.6,
-          gridLines: {
-            drawBorder: false,
-            color: 'rgba(29,140,248,0.0)',
-            zeroLineColor: "transparent",
-          }
-        }],
-
-        xAxes: [{
-          barPercentage: 1.6,
-          gridLines: {
-            drawBorder: false,
-            color: 'rgba(233,32,16,0.1)',
-            zeroLineColor: "transparent",
-          },
-          ticks: {
-            padding: 20,
-            fontColor: "#9a9a9a"
-          }
-        }]
-      }
-    }
-
-    this.gradientChartOptionsConfigurationWithTooltipGreen = {
-      maintainAspectRatio: false,
-      legend: {
-        display: false
-      },
-  
-      tooltips: {
-        backgroundColor: '#f5f5f5',
-        titleFontColor: '#333',
-        bodyFontColor: '#666',
-        bodySpacing: 4,
-        xPadding: 12,
-        mode: "nearest",
-        intersect: 0,
-        position: "nearest"
-      },
-      responsive: true,
-      scales: {
-        yAxes: [{
-          barPercentage: 1.6,
-          gridLines: {
-            drawBorder: false,
-            color: 'rgba(29,140,248,0.0)',
-            zeroLineColor: "transparent",
-          },
-          ticks: {
-            suggestedMin: 50,
-            suggestedMax: 125,
-            padding: 20,
-            fontColor: "#9e9e9e"
-          }
-        }],
-  
-        xAxes: [{
-          barPercentage: 1.6,
-          gridLines: {
-            drawBorder: false,
-            color: 'rgba(0,242,195,0.1)',
-            zeroLineColor: "transparent",
-          },
-          ticks: {
-            padding: 20,
-            fontColor: "#9e9e9e"
-          }
-        }]
-      }
-    }
   }
 
   ngOnInit() {
-
-    // Starts focusing on today
-    this.chart_index = 1
 
     this.spinner.show()
 
@@ -147,19 +52,23 @@ export class DashboardComponent implements OnInit {
       )
   }
 
-  loadConfigurationMetrics(configuration_id: string) {
+  loadRecentTicks(configuration_id: string) {
 
     if (!configuration_id)
       return
 
     this.spinner.show()
 
-    this.facade.loadPerformance(configuration_id)
+    // Get from yesterday on
+    const yesterday_date = new Date()
+    yesterday_date.setDate(yesterday_date.getDate() - 1)
+
+    this.facade.loadTicks(configuration_id, {
+      start_date: yesterday_date.toLocaleDateString(LOCALE)
+    })
     .pipe(finalize(() => this.spinner.hide()))
-    .subscribe((performance: Performance) => {
-      this.buildDay(performance.today.reverse(), performance.yeserday.reverse())
-      // this.buildWeek(performance.week)
-      // this.buildMonth(performance.month)
+    .subscribe((ticks: Tick[]) => {
+      this.buildDay(ticks)
     }, 
     (error) => {
       this.toastr.error('Something went wrong, please try again.', 'Oh no!', {
@@ -168,32 +77,89 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  private buildDay(today: Optimization[], yesterday: Optimization[]) {
+  loadCustomTicks() {
 
-    // Format data
-    const yesterday_target = yesterday.map(t => t.target*100)
-    const yesterday_label = yesterday.map(t => t.date.substr(11))
-    const yesterday_data = yesterday.map(t => t.ad_cost*100)
+    if (!this.configuration_id_custom || !this.dates.from == null || this.dates.to == null)
+      return
 
-    const today_target = today.map(t => t.target*100)
-    const today_label = today.map(t => t.date.substr(11))
-    const today_data = today.map(t => t.ad_cost*100)
+    this.spinner.show()
 
+    this.facade.loadTicks(this.configuration_id_custom, {
+      start_date: new Date(this.dates.from.year, this.dates.from.month - 1, this.dates.from.day).toLocaleDateString(LOCALE),
+      end_date: new Date(this.dates.to.year, this.dates.to.month - 1, this.dates.to.day).toLocaleDateString(LOCALE)
+    })
+    .pipe(finalize(() => this.spinner.hide()))
+    .subscribe((ticks: Tick[]) => {
+      this.buildCustom(ticks)
+    }, 
+    (error) => {
+      this.toastr.error('Something went wrong, please try again.', 'Oh no!', {
+        positionClass: 'toast-bottom-center'
+      })
+    })
+  }
+
+  private buildDay(ticks : Tick[]) {
+
+    ticks.reverse()
+
+    // Starts with today
+    this.chart_index = 1
+
+    const today = new Date()
+
+    // Yesterday data
+    const yesterday_ticks = ticks.filter(t => new Date(t.date).getDate() < today.getDate())
+
+    const yesterday_targets = yesterday_ticks.map(t => t.target)
+    const yesterday_labels = yesterday_ticks.map(t => new Date(t.date).toLocaleString(LOCALE))
+    const yesterday_adcosts = yesterday_ticks.map(t => t.value)
+
+    // Today data
+    const today_ticks = ticks.filter(t => new Date(t.date).getDate() == today.getDate())
+
+    const today_targets = today_ticks.map(t => t.target)
+    const today_labels = today_ticks.map(t => new Date(t.date).toLocaleString(LOCALE))
+    const today_adcosts = today_ticks.map(t => t.value)
+
+    // Both datasets to choose from
     this.datasets = [
       {
-        target: yesterday_target,
-        label: yesterday_label,
-        data: yesterday_data
+        target: yesterday_targets,
+        label: yesterday_labels,
+        data: yesterday_adcosts
       },
       {
-        target: today_target,
-        label: today_label,
-        data: today_data
+        target: today_targets,
+        label: today_labels,
+        data: today_adcosts
       }
     ]
 
-    const canvas : any = document.getElementById("chartBig1");
-    const ctx = canvas.getContext("2d");
+    // Build chart
+    this.recentChart = this.buildChart('recentChart', today_adcosts, today_targets, today_labels)
+  }
+
+  private buildCustom(ticks : Tick[]) {
+
+    ticks.reverse()
+
+    // Format data
+    const adcosts = ticks.map(t => t.value)
+    const targets = ticks.map(t => t.target)
+    const labels = ticks.map(t => new Date(t.date).toLocaleString(LOCALE))
+
+    // Build chart
+    if (this.customChart)
+      this.customChart.destroy()
+
+    this.customChart = this.buildChart('customChart', adcosts, targets, labels)
+  }
+
+  private buildChart(element, adcosts=[], targets=[], labels=[]) {
+
+    const canvas : any = document.getElementById(element)
+    const ctx = canvas.getContext("2d")
 
     const gradientStrokeRed = ctx.createLinearGradient(0, 230, 0, 50);
     gradientStrokeRed.addColorStop(1, 'rgba(233,32,16,0.2)');
@@ -203,7 +169,7 @@ export class DashboardComponent implements OnInit {
     var config = {
       type: 'line',
       data: {
-        labels: undefined,
+        labels: labels,
         datasets: [{
           label: "Ad Cost",
           fill: true,
@@ -219,7 +185,7 @@ export class DashboardComponent implements OnInit {
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,
           pointRadius: 4,
-          data: undefined,
+          data: adcosts,
         }, 
         {
           type: 'line',
@@ -227,107 +193,79 @@ export class DashboardComponent implements OnInit {
           borderWidth: 1,
           borderColor: '#fff',
           pointRadius: 0,
-          data: undefined,
+          data: targets,
         }]
       },
-      options: this.gradientChartOptionsConfigurationWithTooltipRed
+      options: {
+
+        maintainAspectRatio: false,
+  
+        legend: {
+          display: true,
+          position: 'top'
+        },
+  
+        tooltips: {
+          backgroundColor: '#f5f5f5',
+          titleFontColor: '#333',
+          bodyFontColor: '#666',
+          bodySpacing: 4,
+          xPadding: 12,
+          mode: "nearest",
+          intersect: 0,
+          position: "nearest"
+        },
+        responsive: true,
+        scales: {
+          yAxes: [{
+            barPercentage: 1.6,
+            gridLines: {
+              drawBorder: false,
+              color: 'rgba(29,140,248,0.0)',
+              zeroLineColor: "transparent",
+            }
+          }],
+  
+          xAxes: [{
+            barPercentage: 1.6,
+            gridLines: {
+              drawBorder: false,
+              color: 'rgba(233,32,16,0.1)',
+              zeroLineColor: "transparent",
+            },
+            ticks: {
+              padding: 20,
+              fontColor: "#9a9a9a"
+            }
+          }]
+        }
+      }
     };
 
-    this.myChartData = new Chart(ctx, config)
-
-    // Add data to chart
-    this.updateOptions()
+    return new Chart(ctx, config)
   }
 
-  private buildWeek(week_data) {
+  public updateRecentChart(tab) {
 
-    // Chart week
-    const canvas : any = document.getElementById("chartLineGreen")
-    const ctx = canvas.getContext("2d");
+    if (!this.recentChart)
+      return
 
-    const gradientStrokeGreen = ctx.createLinearGradient(0, 230, 0, 50);
-    gradientStrokeGreen.addColorStop(1, 'rgba(66,134,121,0.15)');
-    gradientStrokeGreen.addColorStop(0.4, 'rgba(66,134,121,0.0)'); //green colors
-    gradientStrokeGreen.addColorStop(0, 'rgba(66,134,121,0)'); //green colors
+    this.chart_index = tab
 
-    // Data
-    const week_labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    this.recentChart.data.datasets[0].data = this.datasets[this.chart_index].data
+    this.recentChart.data.datasets[1].data = this.datasets[this.chart_index].target
+    this.recentChart.data.labels = this.datasets[this.chart_index].label
 
-    var data_week = {
-      labels: week_labels,
-      datasets: [{
-        label: "My First dataset",
-        fill: true,
-        backgroundColor: gradientStrokeGreen,
-        borderColor: '#00d6b4',
-        borderWidth: 2,
-        borderDash: [],
-        borderDashOffset: 0.0,
-        pointBackgroundColor: '#00d6b4',
-        pointBorderColor: 'rgba(255,255,255,0)',
-        pointHoverBackgroundColor: '#00d6b4',
-        pointBorderWidth: 20,
-        pointHoverRadius: 4,
-        pointHoverBorderWidth: 15,
-        pointRadius: 4,
-        data: week_data,
-      }]
-    };
-
-    new Chart(ctx, {
-      type: 'line',
-      data: data_week,
-      options: this.gradientChartOptionsConfigurationWithTooltipGreen
-    });
+    this.recentChart.update();
   }
 
-  private buildMonth(month_data) {
-
-    // Month
-    const canvas : any = document.getElementById("chartLineGreenMonth");
-    const ctx = canvas.getContext("2d");
-
-    const gradientStrokeGreen = ctx.createLinearGradient(0, 230, 0, 50);
-    gradientStrokeGreen.addColorStop(1, 'rgba(66,134,121,0.15)');
-    gradientStrokeGreen.addColorStop(0.4, 'rgba(66,134,121,0.0)'); //green colors
-    gradientStrokeGreen.addColorStop(0, 'rgba(66,134,121,0)'); //green colors
-
-    // Data
-    const month_labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec']
-
-    var data_month = {
-      labels: month_labels,
-      datasets: [{
-        label: "My First dataset",
-        fill: true,
-        backgroundColor: gradientStrokeGreen,
-        borderColor: '#00d6b4',
-        borderWidth: 2,
-        borderDash: [],
-        borderDashOffset: 0.0,
-        pointBackgroundColor: '#00d6b4',
-        pointBorderColor: 'rgba(255,255,255,0)',
-        pointHoverBackgroundColor: '#00d6b4',
-        pointBorderWidth: 20,
-        pointHoverRadius: 4,
-        pointHoverBorderWidth: 15,
-        pointRadius: 4,
-        data: month_data,
-      }]
-    };
-
-    new Chart(ctx, {
-      type: 'line',
-      data: data_month,
-      options: this.gradientChartOptionsConfigurationWithTooltipGreen
-    });
+  public chooseConfigurationIdCustom(configuration_id : string) {
+    this.configuration_id_custom = configuration_id
+    this.loadCustomTicks()
   }
 
-  public updateOptions() {
-    this.myChartData.data.datasets[0].data = this.datasets[this.chart_index].data
-    this.myChartData.data.datasets[1].data = this.datasets[this.chart_index].target
-    this.myChartData.data.labels = this.datasets[this.chart_index].label
-
-    this.myChartData.update();
+  public receiveDatePickerEvent(dates : object) {
+    this.dates = dates
+    this.loadCustomTicks()
   }
 }

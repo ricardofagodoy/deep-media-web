@@ -17,6 +17,7 @@ import { GoogleConnectorComponent } from 'src/app/pages/connectors/google/google
 import { NgxSpinnerModule } from "ngx-spinner";
 import { AccountPipe } from 'src/app/pages/campaigns/views/google/pipes/account.pipe';
 import { GoogleCampaignComponent } from 'src/app/pages/campaigns/views/google/google.component';
+import { CalendarPopupComponent } from "src/app/pages/dashboard/calendar-popup.component";
 
 @NgModule({
   imports: [
@@ -29,7 +30,7 @@ import { GoogleCampaignComponent } from 'src/app/pages/campaigns/views/google/go
   ],
   declarations: [
     DashboardComponent,
-    UserComponent,
+    UserComponent, CalendarPopupComponent,
     CampaignsComponent, GoogleCampaignComponent,
     HistoryComponent,
     ConnectorComponent, GoogleConnectorComponent, AccountPipe

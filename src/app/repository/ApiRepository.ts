@@ -2,10 +2,10 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { Performance } from '../models/Performance';
 import { Connector } from '../models/connector';
 import { Configuration } from '../models/configuration';
 import { Optimization } from '../models/optimization';
+import { Tick } from "../models/tick";
 
 @Injectable({
     providedIn: 'root'
@@ -14,9 +14,10 @@ export class ApiRepository {
 
     constructor(private http: HttpClient) {}
 
-    getPerformance(configuration_id: string): Observable<Performance> {
-        return this.http.get<Performance>(
-            `${environment.backend_host}/performance/${configuration_id}`
+    getTicks(configuration_id: string, data?): Observable<Tick[]> {
+        return this.http.get<Tick[]>(
+            `${environment.backend_host}/performance/${configuration_id}`,
+            {params: data}
         )
     }
 

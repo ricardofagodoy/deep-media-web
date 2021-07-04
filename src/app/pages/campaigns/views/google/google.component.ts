@@ -33,7 +33,6 @@ export class GoogleCampaignComponent implements OnInit, OnChanges {
       this.configuration = {
         type: this.TYPE,
         adcost_target: 10,
-        margin: 5,
         active: false
       } as any
   }

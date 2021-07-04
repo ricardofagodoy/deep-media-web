@@ -5,7 +5,6 @@ export type Configuration = {
     ads_account: string,
     ads_campaign: string,
     adcost_target: number,
-    margin: number,
     ga_account: string,
     ga_property: string,
     ga_profile: string,
