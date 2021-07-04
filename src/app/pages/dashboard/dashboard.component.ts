@@ -137,6 +137,9 @@ export class DashboardComponent implements OnInit {
     ]
 
     // Build chart
+    if (this.recentChart)
+      this.recentChart.destroy()
+      
     this.recentChart = this.buildChart('recentChart', today_adcosts, today_targets, today_labels)
   }
 
