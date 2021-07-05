@@ -112,14 +112,14 @@ export class DashboardComponent implements OnInit {
     const yesterday_ticks = ticks.filter(t => new Date(t.date).getDate() < today.getDate())
 
     const yesterday_targets = yesterday_ticks.map(t => t.target)
-    const yesterday_labels = yesterday_ticks.map(t => new Date(t.date).toLocaleString(LOCALE))
+    const yesterday_labels = yesterday_ticks.map(t => new Date(t.date).toLocaleTimeString(LOCALE).substring(0, 5))
     const yesterday_adcosts = yesterday_ticks.map(t => t.value)
 
     // Today data
     const today_ticks = ticks.filter(t => new Date(t.date).getDate() == today.getDate())
 
     const today_targets = today_ticks.map(t => t.target)
-    const today_labels = today_ticks.map(t => new Date(t.date).toLocaleString(LOCALE))
+    const today_labels = today_ticks.map(t => new Date(t.date).toLocaleTimeString(LOCALE).substring(0, 5))
     const today_adcosts = today_ticks.map(t => t.value)
 
     // Both datasets to choose from
@@ -150,7 +150,12 @@ export class DashboardComponent implements OnInit {
     // Format data
     const adcosts = ticks.map(t => t.value)
     const targets = ticks.map(t => t.target)
-    const labels = ticks.map(t => new Date(t.date).toLocaleString(LOCALE))
+    const labels = ticks.map(t => {
+
+      const date_str = new Date(t.date).toLocaleString(LOCALE)
+
+      return `${date_str.substring(0, 5)}  ${date_str.substring(11, 16)}`
+    })
 
     // Build chart
     if (this.customChart)
@@ -174,7 +179,7 @@ export class DashboardComponent implements OnInit {
       data: {
         labels: labels,
         datasets: [{
-          label: "Ad Cost",
+          label: "Ad Cost (%)",
           fill: true,
           backgroundColor: gradientStrokeRed,
           borderColor: '#ec250d',
@@ -192,7 +197,7 @@ export class DashboardComponent implements OnInit {
         }, 
         {
           type: 'line',
-          label: 'Ad Cost Target',
+          label: 'Target (%)',
           borderWidth: 1,
           borderColor: '#fff',
           pointRadius: 0,

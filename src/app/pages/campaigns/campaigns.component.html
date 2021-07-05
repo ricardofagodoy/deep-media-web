@@ -37,7 +37,7 @@
                     </div>
 
                     <div>
-                      <span class="m-0">{{configuration.name}}</span>
+                      <span class="m-0" [ngClass]="{'name-active': configuration.active}">{{configuration.name}}</span>
                     </div>
 
                     <div *ngIf="!opened">
