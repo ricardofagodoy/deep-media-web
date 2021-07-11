@@ -169,10 +169,10 @@ export class DashboardComponent implements OnInit {
     const canvas : any = document.getElementById(element)
     const ctx = canvas.getContext("2d")
 
-    const gradientStrokeRed = ctx.createLinearGradient(0, 230, 0, 50);
-    gradientStrokeRed.addColorStop(1, 'rgba(233,32,16,0.2)');
-    gradientStrokeRed.addColorStop(0.4, 'rgba(233,32,16,0.0)');
-    gradientStrokeRed.addColorStop(0, 'rgba(233,32,16,0)');
+    const gradientStrokeRed = ctx.createLinearGradient(0,19,212,193);
+    gradientStrokeRed.addColorStop(1, 'rgba(12,192,174,0.2)');
+    gradientStrokeRed.addColorStop(0.4, 'rgba(12,192,174,0.0)');
+    gradientStrokeRed.addColorStop(0, 'rgba(12,192,174,0)');
 
     var config = {
       type: 'line',
@@ -182,13 +182,13 @@ export class DashboardComponent implements OnInit {
           label: "Ad Cost (%)",
           fill: true,
           backgroundColor: gradientStrokeRed,
-          borderColor: '#ec250d',
+          borderColor: '#0cbfae',
           borderWidth: 2,
           borderDash: [],
           borderDashOffset: 0.0,
-          pointBackgroundColor: '#ec250d',
+          pointBackgroundColor: '#0cbfae',
           pointBorderColor: 'rgba(255,255,255,0)',
-          pointHoverBackgroundColor: '#ec250d',
+          pointHoverBackgroundColor: '#0cbfae',
           pointBorderWidth: 20,
           pointHoverRadius: 4,
           pointHoverBorderWidth: 15,

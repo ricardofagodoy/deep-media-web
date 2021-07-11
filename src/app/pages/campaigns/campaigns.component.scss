@@ -1,3 +1,5 @@
+@import "src/assets/scss/black-dashboard/custom/deep-media";
+
 ::ng-deep ngb-accordion {
     .card, .card:first-of-type {
         border: 1px solid #cfcee0 !important;
@@ -9,7 +11,7 @@
 }
 
 .name-active {
-    color: #1d8cf8;
+    color: $deep-media-light;
 }
 
 :host ::ng-deep {

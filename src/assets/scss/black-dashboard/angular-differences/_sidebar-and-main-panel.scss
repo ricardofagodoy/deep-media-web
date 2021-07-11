@@ -1,6 +1,6 @@
 .main-panel {
-  &, &[data="red"]{
-    border-color: $danger;
+  &, &[data="blue"]{
+    border-color: $deep-media-light;
   }
 
   .content {
@@ -31,6 +31,9 @@
   }
   &[data="primary"]{
     @include linear-gradient($primary-states, $primary);
+  }
+  &, &[data="deepmedia"]{
+    @include linear-gradient($deep-media-light, $deep-media-dark);
   }
 }
 @media screen and (max-width: 991px){

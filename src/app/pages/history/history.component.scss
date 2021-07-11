@@ -1,11 +1,13 @@
+@import "src/assets/scss/black-dashboard/custom/deep-media";
+
 .next-optimization {
     width: 100%;
     font-size: 1.3em;
     color: #fff;
-    background-color: rgba($color: #00ff4c, $alpha: 0.5);
+    background-color: rgba($color: $deep-media-light, $alpha: 0.6);
     padding: 2%;
     margin-bottom: 3%;
-    border-radius: 2px;
+    border-radius: 4px;
 }
 
 .disabled {
