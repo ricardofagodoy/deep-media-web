@@ -54,7 +54,7 @@ export class GoogleConnectorComponent implements OnInit {
         })
       }, (error) => {
 
-        const message = error?.error?.error?.join(', ') || 'Internal error - please try again'
+        const message = error?.error?.error || 'Internal error'
 
         this.toastr.error(message, 'Error', {
           positionClass: 'toast-bottom-center',

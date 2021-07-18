@@ -8,6 +8,7 @@ export type Configuration = {
     ga_account: string,
     ga_property: string,
     ga_profile: string,
+    ga_dimension: string,
     ga_metric: string,
     active: boolean
 }
