@@ -49,4 +49,39 @@ export class GoogleCampaignComponent implements OnInit, OnChanges {
       this.configuration.ga_dimension &&
       this.configuration.ga_metric
   }
+
+  // Binding to view selections
+  select_ads_account(ads_account) {
+    this.configuration.ads_account = ads_account
+    this.configuration.ads_campaign = undefined
+  }
+
+  select_ads_campaign(ads_campaign) {
+    this.configuration.ads_campaign = ads_campaign
+  }
+
+  select_analytics_account(analytics_account) {
+    this.configuration.ga_account = analytics_account
+    this.configuration.ga_property = undefined
+    this.configuration.ga_profile = undefined
+    this.configuration.ga_metric = undefined
+  }
+
+  select_analytics_property(analytics_property) {
+    this.configuration.ga_property = analytics_property
+    this.configuration.ga_profile = undefined
+    this.configuration.ga_metric = undefined
+  }
+
+  select_analytics_profile(analytics_profile) {
+    this.configuration.ga_profile = analytics_profile
+  }
+
+  select_analytics_dimension(analytics_dimension) {
+    this.configuration.ga_dimension = analytics_dimension
+  }
+
+  select_analytics_metric(analytics_metric) {
+    this.configuration.ga_metric = analytics_metric
+  }
 }

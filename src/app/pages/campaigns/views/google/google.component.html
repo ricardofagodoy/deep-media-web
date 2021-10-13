@@ -18,12 +18,24 @@
             <div class=" form-group">
                 <label> Ads Account </label>
                 <br />
-                <select name="ads_account" [(ngModel)]="configuration.ads_account" class="is-valid"
+
+                <!-- <select name="ads_account" [(ngModel)]="configuration.ads_account" class="is-valid"
                         (change)="configuration.ads_campaign=undefined">
                     <option *ngFor="let account of options.ads_accounts | keyvalue" [value]="account.key">
                         {{account.key | account}}
                     </option>
-                </select>
+                </select> -->
+            
+                <!-- Ads Account selection -->
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-primary" ngbDropdownToggle>{{configuration.ads_account | account}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let account of options.ads_accounts | keyvalue" (click)="select_ads_account(account.key)" ngbDropdownItem>
+                        {{account.key | account}}
+                    </button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -37,12 +49,24 @@
             <div class=" form-group">
                 <label> Ads Campaign </label>
                 <br />
-                <select name="ads_campaign" [(ngModel)]="configuration.ads_campaign"
+
+                <!-- <select name="ads_campaign" [(ngModel)]="configuration.ads_campaign"
                     *ngIf="configuration.ads_account; else placeholder">
                     <option *ngFor="let campaign of options.ads_accounts[configuration.ads_account]" [value]="campaign">
                         {{campaign}}
                     </option>
-                </select>
+                </select> -->
+
+                <!-- Ads Campaign selection -->
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-primary" ngbDropdownToggle>{{configuration.ads_campaign}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let campaign of options.ads_accounts[configuration.ads_account]" (click)="select_ads_campaign(campaign)" ngbDropdownItem>
+                        {{campaign}}
+                    </button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -58,12 +82,24 @@
             <div class=" form-group">
                 <label> Analytics Account </label>
                 <br />
-                <select name="ga_account" [(ngModel)]="configuration.ga_account"
+
+                <!-- <select name="ga_account" [(ngModel)]="configuration.ga_account"
                         (change)="configuration.ga_property=undefined;configuration.ga_profile=undefined;configuration.ga_metric=undefined">
                     <option *ngFor="let account of options.ga_accounts | keyvalue" [value]="account.key">
                         {{account.value.name}}
                     </option>
-                </select>
+                </select> -->
+
+                <!-- Analytics Account selection -->
+                <div ngbDropdown class="d-inline-block">
+                    <button class="btn btn-outline-primary" ngbDropdownToggle>{{configuration.ga_account}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let account of options.ga_accounts | keyvalue" (click)="select_analytics_account(account.key)" ngbDropdownItem>
+                        {{account.value.name}}
+                    </button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -77,14 +113,26 @@
             <div class=" form-group">
                 <label> Analytics Property </label>
                 <br />
-                <select name="ga_property" [(ngModel)]="configuration.ga_property"
+                
+                <!-- <select name="ga_property" [(ngModel)]="configuration.ga_property"
                     (change)="configuration.ga_profile=undefined;configuration.ga_metric=undefined"
                     *ngIf="configuration.ga_account; else placeholder">
                     <option *ngFor="let property of options.ga_accounts[configuration.ga_account].properties | keyvalue"
                         [value]="property.key">
                         {{property.key}}
                     </option>
-                </select>
+                </select> -->
+
+                <!-- Analytics property selection -->
+                <div ngbDropdown class="d-inline-block" *ngIf="configuration.ga_account; else placeholder">
+                    <button class="btn btn-outline-primary" ngbDropdownToggle>{{configuration.ga_property}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let property of options.ga_accounts[configuration.ga_account].properties | keyvalue" (click)="select_analytics_property(property.key)" ngbDropdownItem>
+                        {{property.key}}
+                    </button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -98,14 +146,26 @@
             <div class=" form-group">
                 <label> Analytics Profile (View) </label>
                 <br />
-                <select name="ga_metric" [(ngModel)]="configuration.ga_profile"
+                
+                <!-- <select name="ga_metric" [(ngModel)]="configuration.ga_profile"
                     *ngIf="configuration.ga_property; else placeholder">
                     <option
                         *ngFor="let profile of options.ga_accounts[configuration.ga_account].properties[configuration.ga_property].profiles"
                         [value]="profile.id">
                         {{profile.name}}
                     </option>
-                </select>
+                </select> -->
+
+                <!-- Analytics Profile selection -->
+                <div ngbDropdown class="d-inline-block" *ngIf="configuration.ga_property; else placeholder">
+                    <button class="btn btn-outline-primary" ngbDropdownToggle>{{configuration.ga_profile}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let profile of options.ga_accounts[configuration.ga_account].properties[configuration.ga_property].profiles" (click)="select_analytics_profile(profile.id)" ngbDropdownItem>
+                        {{profile.name}}
+                    </button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -119,14 +179,26 @@
             <div class=" form-group">
                 <label> Analytics Dimension </label>
                 <br />
-                <select name="ga_dimension" [(ngModel)]="configuration.ga_dimension"
+
+                <!-- <select name="ga_dimension" [(ngModel)]="configuration.ga_dimension"
                     *ngIf="configuration.ga_property; else placeholder">
                     <option
                         *ngFor="let dimension of options.ga_fields['dimensions']"
                         [value]="dimension.id">
                         {{dimension.name}}
                     </option>
-                </select>
+                </select> -->
+
+                <!-- Analytics Dimension selection -->
+                <div ngbDropdown class="d-inline-block" *ngIf="configuration.ga_property; else placeholder">
+                    <button class="btn btn-outline-primary" ngbDropdownToggle>{{configuration.ga_dimension}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let dimension of options.ga_fields['dimensions']" (click)="select_analytics_dimension(dimension.id)" ngbDropdownItem>
+                        {{dimension.name}}
+                    </button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -140,14 +212,26 @@
             <div class=" form-group">
                 <label> Analytics Metric </label>
                 <br />
-                <select name="ga_metric" [(ngModel)]="configuration.ga_metric"
+                
+                <!-- <select name="ga_metric" [(ngModel)]="configuration.ga_metric"
                     *ngIf="configuration.ga_property; else placeholder">
                     <option
                         *ngFor="let metric of options.ga_fields['metrics']"
                         [value]="metric.id">
                         {{metric.name}}
                     </option>
-                </select>
+                </select> -->
+
+                <!-- Analytics Metric selection -->
+                <div ngbDropdown class="d-inline-block" *ngIf="configuration.ga_property; else placeholder">
+                    <button class="btn btn-outline-primary" ngbDropdownToggle>{{configuration.ga_metric}}</button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button *ngFor="let metric of options.ga_fields['metrics']" (click)="select_analytics_metric(metric.id)" ngbDropdownItem>
+                        {{metric.name}}
+                    </button>
+                    </div>
+                </div>
+
             </div>
         </div>
 
